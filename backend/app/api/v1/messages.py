@@ -26,6 +26,27 @@ def get_message_service() -> MessageService:
     )
 
 
+def check_anonymous_rate_limit(request: Request) -> None:
+    client_host = request.client.host if request.client else "unknown"
+
+    key = f"anonymous-message:{client_host}"
+
+    if not anonymous_message_limiter.is_allowed(key):
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail={
+                "success": False,
+                "error": {
+                    "code": "RATE_LIMIT_EXCEEDED",
+                    "message": (
+                        "Too many messages. "
+                        "Please try again later."
+                    ),
+                },
+            },
+        )
+
+
 @router.post(
     "/{username}",
     status_code=status.HTTP_201_CREATED,
@@ -127,22 +148,22 @@ def delete_message(
     }
 
 
-def check_anonymous_rate_limit(request: Request) -> None:
-    client_host = request.client.host if request.client else "unknown"
+@router.get("/unread-count")
+def get_unread_count(
+    clerk_user_id: CurrentClerkUser,
+    service: MessageService = Depends(get_message_service),
+):
+    user_service = UserService(service.users)
 
-    key = f"anonymous-message:{client_host}"
+    user = user_service.get_or_create_user(clerk_user_id)
 
-    if not anonymous_message_limiter.is_allowed(key):
-        raise HTTPException(
-            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-            detail={
-                "success": False,
-                "error": {
-                    "code": "RATE_LIMIT_EXCEEDED",
-                    "message": (
-                        "Too many messages. "
-                        "Please try again later."
-                    ),
-                },
-            },
-        )
+    count = service.messages.count_unread(
+        user["_id"],
+    )
+
+    return {
+        "success": True,
+        "data": {
+            "count": count,
+        },
+    }

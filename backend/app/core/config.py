@@ -64,12 +64,12 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
-    RATE_LIMIT_WINDOW_SECONDS: int = Field(
-    default=60,
-    alias="RATE_LIMIT_WINDOW_SECONDS",
+    rate_limit_window_seconds: int = Field(
+        default=60,
+        alias="RATE_LIMIT_WINDOW_SECONDS",
     )
 
-    RATE_LIMIT_MAX_REQUESTS: int = Field(
+    rate_limit_max_requests: int = Field(
         default=5,
         alias="RATE_LIMIT_MAX_REQUESTS",
     )
