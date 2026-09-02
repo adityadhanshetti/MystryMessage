@@ -2,18 +2,16 @@ from pymongo.database import Database
 
 
 def create_indexes(database: Database) -> None:
-    """
-    Create application database indexes.
+    users = database["users"]
 
-    This function will grow as we add users, messages,
-    links, reactions, polls, reports, etc.
-    """
+    users.create_index(
+        "clerk_user_id",
+        unique=True,
+        name="uq_users_clerk_user_id",
+    )
 
-    # Future indexes will be created here.
-    #
-    # Example:
-    #
-    # database.users.create_index(
-    #     "clerk_user_id",
-    #     unique=True,
-    # )
+    users.create_index(
+        "username_normalized",
+        unique=True,
+        name="uq_users_username_normalized",
+    )

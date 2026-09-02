@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.v1.health import router as health_router
+from app.api.v1.users import router as users_router
 from app.core.config import get_settings
 from app.core.logging import configure_logging
 from app.db.indexes import create_indexes
@@ -65,6 +66,10 @@ app.include_router(
     prefix=settings.api_v1_prefix,
 )
 
+app.include_router(
+    users_router,
+    prefix=settings.api_v1_prefix,
+)
 
 @app.get("/")
 async def root() -> dict:
