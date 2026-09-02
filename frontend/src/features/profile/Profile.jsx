@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 
 import { useMyProfile, useUpdateProfile } from "./api";
 
+import CopyProfileLink from "./CopyProfileLink";
+
 export default function Profile() {
     const { data, isLoading, isError, error } = useMyProfile();
 
@@ -92,6 +94,7 @@ export default function Profile() {
             <button type="submit" disabled={updateProfile.isPending}>
                 {updateProfile.isPending ? "Saving..." : "Save changes"}
             </button>
+            <CopyProfileLink username={form.username} />
 
             {updateProfile.isSuccess && <p>Profile updated successfully.</p>}
 

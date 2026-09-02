@@ -86,14 +86,9 @@ def get_public_profile(
 ):
     normalized = validate_username(username)
 
-    user = service.repository.get_by_username(
-        normalized
-    )
+    user = service.repository.get_by_username(normalized)
 
-    if not user or not user.get(
-        "is_public",
-        True,
-    ):
+    if not user or not user.get("is_public", True):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail={
@@ -114,7 +109,6 @@ def get_public_profile(
             "avatar_url": user["avatar_url"],
         },
     }
-
 
 def serialize_user(user: dict) -> dict:
     return {
