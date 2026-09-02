@@ -1,12 +1,6 @@
-import {
-    SignedIn,
-    SignedOut,
-    SignInButton,
-    UserButton,
-} from "@clerk/clerk-react";
+import { Link, createFileRoute, redirect } from "@tanstack/react-router";
 
-import { createFileRoute } from "@tanstack/react-router";
-import Profile from "../features/profile/Profile";
+import { SignedIn, SignedOut, SignInButton } from "@clerk/clerk-react";
 
 export const Route = createFileRoute("/")({
     component: Home,
@@ -17,13 +11,14 @@ function Home() {
         <main>
             <h1>Mystry Message</h1>
 
+            <p>Receive anonymous messages from anyone.</p>
+
             <SignedOut>
                 <SignInButton />
             </SignedOut>
 
             <SignedIn>
-                <UserButton />
-                <Profile />
+                <Link to="/inbox">Go to Inbox</Link>
             </SignedIn>
         </main>
     );
