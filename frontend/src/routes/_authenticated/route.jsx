@@ -1,7 +1,4 @@
-import { Outlet, redirect } from "@tanstack/react-router";
-import { useAuth } from "@clerk/clerk-react";
-
-import { createFileRoute } from "@tanstack/react-router";
+import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated")({
     beforeLoad: ({ context }) => {
@@ -16,9 +13,5 @@ export const Route = createFileRoute("/_authenticated")({
 });
 
 function AuthenticatedLayout() {
-    return (
-        <div>
-            <Outlet />
-        </div>
-    );
+    return <Outlet />;
 }

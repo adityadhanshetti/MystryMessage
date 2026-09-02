@@ -62,3 +62,80 @@ class MessageService:
             limit=limit,
             skip=skip,
         )
+
+    def mark_as_read(
+        self,
+        message_id: str,
+        recipient_id: str,
+    ) -> dict:
+        try:
+            message_object_id = ObjectId(message_id)
+            recipient_object_id = ObjectId(recipient_id)
+        except Exception as exc:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail={
+                    "success": False,
+                    "error": {
+                        "code": "INVALID_ID",
+                        "message": "Invalid message or user ID.",
+                    },
+                },
+            ) from exc
+
+        message = self.messages.mark_as_read(
+            message_object_id,
+            recipient_object_id,
+        )
+
+        if not message:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail={
+                    "success": False,
+                    "error": {
+                        "code": "MESSAGE_NOT_FOUND",
+                        "message": "Message not found.",
+                    },
+                },
+            )
+
+        return message
+
+
+    def delete_message(
+        self,
+        message_id: str,
+        recipient_id: str,
+    ) -> None:
+        try:
+            message_object_id = ObjectId(message_id)
+            recipient_object_id = ObjectId(recipient_id)
+        except Exception as exc:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail={
+                    "success": False,
+                    "error": {
+                        "code": "INVALID_ID",
+                        "message": "Invalid message or user ID.",
+                    },
+                },
+            ) from exc
+    
+        deleted = self.messages.soft_delete(
+            message_object_id,
+            recipient_object_id,
+        )
+    
+        if not deleted:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail={
+                    "success": False,
+                    "error": {
+                        "code": "MESSAGE_NOT_FOUND",
+                        "message": "Message not found.",
+                    },
+                },
+            )

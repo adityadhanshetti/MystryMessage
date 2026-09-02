@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Query, status
+from fastapi import APIRouter, Depends, Query, status,Path
 
 from app.api.dependencies import CurrentClerkUser
 from app.db.mongodb import mongodb
@@ -75,4 +75,49 @@ def get_my_inbox(
             }
             for message in messages
         ],
+    }
+
+@router.patch("/{message_id}/read")
+def mark_message_as_read(
+    message_id: str,
+    clerk_user_id: CurrentClerkUser,
+    service: MessageService = Depends(get_message_service),
+):
+    user_service = UserService(service.users)
+
+    user = user_service.get_or_create_user(clerk_user_id)
+
+    service.mark_as_read(
+        message_id=message_id,
+        recipient_id=str(user["_id"]),
+    )
+
+    return {
+        "success": True,
+        "data": {
+            "message": "Message marked as read.",
+        },
+    }
+
+
+@router.delete("/{message_id}")
+def delete_message(
+    message_id: str,
+    clerk_user_id: CurrentClerkUser,
+    service: MessageService = Depends(get_message_service),
+):
+    user_service = UserService(service.users)
+
+    user = user_service.get_or_create_user(clerk_user_id)
+
+    service.delete_message(
+        message_id=message_id,
+        recipient_id=str(user["_id"]),
+    )
+
+    return {
+        "success": True,
+        "data": {
+            "message": "Message deleted.",
+        },
     }
