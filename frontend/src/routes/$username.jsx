@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
+import AnonymousMessageForm from "../features/messages/AnonymousMessageForm";
+
 export const Route = createFileRoute("/$username")({
     component: PublicProfile,
 });
@@ -13,7 +15,7 @@ function PublicProfile() {
 
             <p>Send an anonymous message.</p>
 
-            {/* Message form will come in Step 4 */}
+            <AnonymousMessageForm username={username} />
         </main>
     );
 }
