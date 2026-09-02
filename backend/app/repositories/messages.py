@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from typing import Any
 
 from bson import ObjectId
@@ -118,10 +118,10 @@ class MessageRepository:
                 }
             },
         )
-    
+
         return self.get_by_id(message_id)
-    
-    
+
+
     def soft_delete(
         self,
         message_id: ObjectId,
@@ -140,10 +140,10 @@ class MessageRepository:
                 }
             },
         )
-    
+
         return result.modified_count == 1
-    
-    
+
+
     def count_unread(
         self,
         recipient_id: ObjectId,
@@ -154,4 +154,25 @@ class MessageRepository:
                 "is_read": False,
                 "is_deleted": False,
             }
+        )
+
+    def recent_duplicate_exists(
+        self,
+        recipient_id: ObjectId,
+        content: str,
+    ) -> bool:
+        return (
+            self.collection.count_documents(
+                {
+                    "recipient_id": recipient_id,
+                    "content": content,
+                    "is_deleted": False,
+                    "created_at": {
+                        "$gte": datetime.now(timezone.utc)
+                        - timedelta(minutes=5)
+                    },
+                },
+                limit=1,
+            )
+            > 0
         )

@@ -64,6 +64,16 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
+    RATE_LIMIT_WINDOW_SECONDS: int = Field(
+    default=60,
+    alias="RATE_LIMIT_WINDOW_SECONDS",
+    )
+
+    RATE_LIMIT_MAX_REQUESTS: int = Field(
+        default=5,
+        alias="RATE_LIMIT_MAX_REQUESTS",
+    )
+
     @property
     def cors_origin_list(self) -> list[str]:
         return [

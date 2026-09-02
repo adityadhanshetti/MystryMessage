@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Query, status,Path
+from fastapi import APIRouter, Depends, Query, status,Path,HTTPException,Request
 
 from app.api.dependencies import CurrentClerkUser
 from app.db.mongodb import mongodb
@@ -7,6 +7,8 @@ from app.repositories.users import UserRepository
 from app.schemas.message import MessageCreate
 from app.services.messages import MessageService
 from app.services.users import UserService
+
+from app.core.security import anonymous_message_limiter
 
 
 router = APIRouter(
@@ -29,8 +31,10 @@ def get_message_service() -> MessageService:
     status_code=status.HTTP_201_CREATED,
 )
 def send_anonymous_message(
+    request: Request,
     username: str,
     payload: MessageCreate,
+    _: None = Depends(check_anonymous_rate_limit),
     service: MessageService = Depends(get_message_service),
 ):
     message = service.send_message(
@@ -121,3 +125,24 @@ def delete_message(
             "message": "Message deleted.",
         },
     }
+
+
+def check_anonymous_rate_limit(request: Request) -> None:
+    client_host = request.client.host if request.client else "unknown"
+
+    key = f"anonymous-message:{client_host}"
+
+    if not anonymous_message_limiter.is_allowed(key):
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail={
+                "success": False,
+                "error": {
+                    "code": "RATE_LIMIT_EXCEEDED",
+                    "message": (
+                        "Too many messages. "
+                        "Please try again later."
+                    ),
+                },
+            },
+        )

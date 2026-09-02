@@ -1,3 +1,11 @@
+from clerk_backend_api.models import commercesubscriptionnextpayment
+from clerk_backend_api.models import commercesubscriptionnextpayment
+from clerk_backend_api.models import commercesubscriptionnextpayment
+from clerk_backend_api.models import commercesubscriptionnextpayment
+from clerk_backend_api.models import commercesubscriptionnextpayment
+from clerk_backend_api.models import commercesubscriptionnextpayment
+from clerk_backend_api.models import commercesubscriptionnextpayment
+from clerk_backend_api.models import commercesubscriptionnextpayment
 from bson import ObjectId
 from fastapi import HTTPException, status
 
@@ -31,6 +39,21 @@ class MessageService:
                     "error": {
                         "code": "PROFILE_NOT_FOUND",
                         "message": "Profile not found.",
+                    },
+                },
+            )
+		
+        if self.messages.recent_duplicate_exists(
+            recipient["_id"],
+            payload.content,
+        ):
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail={
+                    "success": False,
+                    "error": {
+                        "code": "DUPLICATE_MESSAGE",
+                        "message": "This message was already sent recently.",
                     },
                 },
             )
@@ -122,12 +145,12 @@ class MessageService:
                     },
                 },
             ) from exc
-    
+
         deleted = self.messages.soft_delete(
             message_object_id,
             recipient_object_id,
         )
-    
+
         if not deleted:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
