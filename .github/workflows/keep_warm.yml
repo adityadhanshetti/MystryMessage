@@ -1,0 +1,37 @@
+name: Keep Render Server Warm
+
+on:
+  schedule:
+    # Render free-tier spins down after 15 minutes of inactivity.
+    # Running every 14 minutes keeps the server awake with zero cold starts.
+    # NOTE: If you prefer a 12-hour ping schedule, replace with: '0 */12 * * *'
+    - cron: '*/14 * * * *'
+
+  # Allows manual triggering from GitHub Actions tab
+  workflow_dispatch:
+
+jobs:
+  ping-server:
+    name: Ping Render Health Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Ping Backend Health Endpoint
+        env:
+          BACKEND_URL: ${{ secrets.RENDER_BACKEND_URL }}
+        run: |
+          TARGET_URL="${BACKEND_URL:-https://mystry-backend.onrender.com}/api/v1/health"
+          echo "Pinging health endpoint: $TARGET_URL"
+
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 30 "$TARGET_URL" || echo "FAILED")
+
+          echo "Response HTTP Status: $HTTP_CODE"
+
+          if [ "$HTTP_CODE" -eq 200 ]; then
+            echo "✅ Server is warm and healthy!"
+          else
+            echo "⚠️ Health check returned status $HTTP_CODE (or timed out during spin-up). Retrying in 15 seconds..."
+            sleep 15
+            curl -s -f --max-time 60 "$TARGET_URL" && echo "✅ Server awakened on retry!" || echo "❌ Warning: Could not wake server."
+          fi

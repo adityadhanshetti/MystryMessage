@@ -100,6 +100,14 @@ docker compose up -d --build
 
 ---
 
+## 🌐 Cloud Deployment (Vercel + Render)
+
+For full step-by-step instructions on deploying the **frontend to Vercel** and **backend to Render** with MongoDB Atlas and Upstash Redis, see the dedicated guide:
+
+👉 **[Complete Deployment Guide (DEPLOYMENT.md)](./DEPLOYMENT.md)**
+
+---
+
 ##  Local Development (Without Docker)
 
 ### Backend Setup
