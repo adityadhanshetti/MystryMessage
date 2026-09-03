@@ -43,7 +43,7 @@ class Settings(BaseSettings):
     )
 
     clerk_authorized_parties: str = Field(
-        default="http://localhost:5173",
+        default="",
         alias="CLERK_AUTHORIZED_PARTIES",
     )
 
@@ -119,21 +119,14 @@ class Settings(BaseSettings):
 
     @property
     def clerk_authorized_party_list(self) -> list[str]:
-        parties = [
+        if not self.clerk_authorized_parties or self.clerk_authorized_parties.strip() == "*":
+            return []
+
+        return [
             origin.strip()
             for origin in self.clerk_authorized_parties.split(",")
             if origin.strip()
         ]
-        defaults = [
-            "http://localhost:3000",
-            "http://localhost:5173",
-            "http://127.0.0.1:3000",
-            "http://127.0.0.1:5173",
-        ]
-        for d in defaults:
-            if d not in parties:
-                parties.append(d)
-        return parties
 
     @property
     def is_production(self) -> bool:
