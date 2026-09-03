@@ -52,6 +52,31 @@ class Settings(BaseSettings):
         alias="CORS_ORIGINS",
     )
 
+    redis_url: str | None = Field(
+        default=None,
+        alias="REDIS_URL",
+    )
+
+    cloudinary_cloud_name: str | None = Field(
+        default=None,
+        alias="CLOUDINARY_CLOUD_NAME",
+    )
+
+    cloudinary_api_key: str | None = Field(
+        default=None,
+        alias="CLOUDINARY_API_KEY",
+    )
+
+    cloudinary_api_secret: str | None = Field(
+        default=None,
+        alias="CLOUDINARY_API_SECRET",
+    )
+
+    cloudinary_upload_preset: str | None = Field(
+        default=None,
+        alias="CLOUDINARY_UPLOAD_PRESET",
+    )
+
     log_level: str = Field(
         default="INFO",
         alias="LOG_LEVEL",

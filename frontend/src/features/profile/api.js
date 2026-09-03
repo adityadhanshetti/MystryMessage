@@ -45,3 +45,30 @@ export function useUpdateProfile() {
         },
     });
 }
+
+export function useAvatarUploadSignature() {
+    const { getToken } = useAuth();
+
+    return useMutation({
+        mutationFn: () =>
+            apiRequest("/users/avatar-signature", {
+                getToken,
+                method: "POST",
+            }),
+    });
+}
+
+export function useMyStats() {
+    const { getToken, isSignedIn } = useAuth();
+
+    return useQuery({
+        queryKey: ["profile", "stats"],
+        queryFn: () =>
+            apiRequest("/users/me/stats", {
+                getToken,
+            }),
+        enabled: Boolean(isSignedIn),
+        staleTime: 30 * 1000,
+    });
+}
+

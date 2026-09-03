@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Any
 
 from pydantic import BaseModel, Field, field_validator
 
@@ -26,9 +27,13 @@ class MessageCreate(BaseModel):
 
 class MessageResponse(BaseModel):
     id: str
+    conversation_id: str
     content: str
+    sender: str = "anonymous"
     is_read: bool
     created_at: datetime
+    sender_hint: dict[str, Any] | None = None
+    reactions: dict[str, int] = Field(default_factory=dict)
 
 
 class MessageSendResponse(BaseModel):
@@ -51,7 +56,12 @@ class MessageReply(BaseModel):
 
         return value
 
+
 class AnonymousMessageResponse(BaseModel):
     message_id: str
     conversation_id: str
     conversation_token: str
+
+
+class MessageReaction(BaseModel):
+    emoji: str = Field(min_length=1, max_length=16)

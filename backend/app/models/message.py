@@ -11,9 +11,11 @@ class MessageModel:
     def create_document(
         *,
         conversation_id: ObjectId,
-        recipient_id: ObjectId,
+        recipient_id: ObjectId | None,
         content: str,
         sender: str,
+        sender_hint: dict[str, Any] | None = None,
+        reactions: dict[str, int] | None = None,
     ) -> dict[str, Any]:
         now = datetime.now(timezone.utc)
 
@@ -25,6 +27,8 @@ class MessageModel:
             "content": content,
             "is_read": False,
             "is_deleted": False,
+            "sender_hint": sender_hint or None,
+            "reactions": reactions or {},
             "created_at": now,
             "updated_at": now,
         }

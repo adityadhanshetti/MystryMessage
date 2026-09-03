@@ -1,15 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
-
-import Inbox from "../../features/messages/Inbox";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/inbox")({
-    component: InboxPage,
+    component: InboxLayout,
 });
 
-function InboxPage() {
-    return (
-        <main>
-            <Inbox />
-        </main>
-    );
+function InboxLayout() {
+    return <Outlet />;
 }

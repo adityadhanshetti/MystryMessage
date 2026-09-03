@@ -7,6 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.v1.health import router as health_router
 from app.api.v1.users import router as users_router
 from app.api.v1.messages import router as messages_router
+from app.api.v1.conversations import router as conversations_router
 
 from app.core.config import get_settings
 from app.core.logging import configure_logging
@@ -59,8 +60,21 @@ app.add_middleware(
     allow_origins=settings.cors_origin_list,
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allow_headers=["Authorization", "Content-Type"],
+    allow_headers=["Authorization", "Content-Type", "X-Conversation-Token"],
 )
+
+
+@app.middleware("http")
+async def request_id_and_security_middleware(request, call_next):
+    import uuid
+    request_id = request.headers.get("X-Request-ID", str(uuid.uuid4()))
+    response = await call_next(request)
+    response.headers["X-Request-ID"] = request_id
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    return response
 
 
 app.include_router(
@@ -75,6 +89,11 @@ app.include_router(
 
 app.include_router(
     messages_router,
+    prefix=settings.api_v1_prefix,
+)
+
+app.include_router(
+    conversations_router,
     prefix=settings.api_v1_prefix,
 )
 

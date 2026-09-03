@@ -1,4 +1,3 @@
-from clerk_backend_api.models import updateemailaddressop
 from bson import ObjectId
 from fastapi import HTTPException, status
 
@@ -15,7 +14,7 @@ class UserService:
     ) -> None:
         self.repository = repository
 
-    async def get_or_create_user(
+    def get_or_create_user(
         self,
         clerk_user_id: str,
     ) -> dict:
@@ -26,7 +25,7 @@ class UserService:
         if existing:
             return existing
 
-        clerk_user = await clerk_service.get_user(
+        clerk_user = clerk_service.get_user(
             clerk_user_id
         )
 
