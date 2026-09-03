@@ -133,3 +133,25 @@ export function useUnreadCount() {
         refetchInterval: 30 * 1000,
     });
 }
+
+export function useReplyToMessage(page = 1) {
+    const { getToken } = useAuth();
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: ({ messageId, content }) =>
+            apiRequest(`/messages/${messageId}/reply`, {
+                getToken,
+                method: "POST",
+                body: {
+                    content,
+                },
+            }),
+
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: messageKeys.inbox(page),
+            });
+        },
+    });
+}

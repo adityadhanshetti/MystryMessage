@@ -33,3 +33,20 @@ class MessageResponse(BaseModel):
 
 class MessageSendResponse(BaseModel):
     message: str
+
+
+class MessageReply(BaseModel):
+    content: str = Field(
+        min_length=1,
+        max_length=1000,
+    )
+
+    @field_validator("content")
+    @classmethod
+    def validate_content(cls, value: str) -> str:
+        value = value.strip()
+
+        if not value:
+            raise ValueError("Reply cannot be empty.")
+
+        return value

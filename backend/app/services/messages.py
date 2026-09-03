@@ -154,3 +154,47 @@ class MessageService:
                     },
                 },
             )
+
+    def reply_to_message(
+        self,
+        message_id: str,
+        recipient_id: str,
+        content: str,
+    ) -> dict:
+        try:
+            message_object_id = ObjectId(message_id)
+            recipient_object_id = ObjectId(recipient_id)
+        except Exception as exc:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail={
+                    "success": False,
+                    "error": {
+                        "code": "INVALID_ID",
+                        "message": "Invalid message or user ID.",
+                    },
+                },
+            ) from exc
+
+        message = self.messages.add_reply(
+            message_object_id,
+            recipient_object_id,
+            content,
+        )
+
+        if not message:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail={
+                    "success": False,
+                    "error": {
+                        "code": "REPLY_NOT_ALLOWED",
+                        "message": (
+                            "Message does not exist or "
+                            "already has a reply."
+                        ),
+                    },
+                },
+            )
+
+        return message

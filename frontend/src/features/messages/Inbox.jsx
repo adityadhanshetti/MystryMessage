@@ -7,6 +7,8 @@ import {
     useMarkMessageAsRead,
 } from "./api";
 
+import ReplyForm from "./ReplyForm";
+
 export default function Inbox() {
     const [page, setPage] = useState(1);
 
@@ -89,6 +91,24 @@ export default function Inbox() {
                                 >
                                     Delete
                                 </button>
+                                {message.reply ? (
+                                    <div>
+                                        <strong>Your reply</strong>
+
+                                        <p>{message.reply.content}</p>
+
+                                        <small>
+                                            {new Date(
+                                                message.reply.created_at,
+                                            ).toLocaleString()}
+                                        </small>
+                                    </div>
+                                ) : (
+                                    <ReplyForm
+                                        messageId={message.id}
+                                        page={page}
+                                    />
+                                )}
                             </div>
                         </article>
                     ))}

@@ -8,6 +8,8 @@ from app.schemas.message import MessageCreate
 from app.services.messages import MessageService
 from app.services.users import UserService
 
+from app.schemas.message import MessageCreate, MessageReply
+
 from app.core.security import anonymous_message_limiter
 
 
@@ -96,6 +98,7 @@ def get_my_inbox(
                 "id": str(message["_id"]),
                 "content": message["content"],
                 "is_read": message["is_read"],
+                "reply": message.get("reply"),
                 "created_at": message["created_at"],
             }
             for message in messages
@@ -165,5 +168,32 @@ def get_unread_count(
         "success": True,
         "data": {
             "count": count,
+        },
+    }
+
+@router.post("/{message_id}/reply")
+def reply_to_message(
+    message_id: str,
+    payload: MessageReply,
+    clerk_user_id: CurrentClerkUser,
+    service: MessageService = Depends(get_message_service),
+):
+    user_service = UserService(service.users)
+
+    user = user_service.get_or_create_user(
+        clerk_user_id
+    )
+
+    message = service.reply_to_message(
+        message_id=message_id,
+        recipient_id=str(user["_id"]),
+        content=payload.content,
+    )
+
+    return {
+        "success": True,
+        "data": {
+            "id": str(message["_id"]),
+            "message": "Reply sent successfully.",
         },
     }

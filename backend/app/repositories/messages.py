@@ -176,3 +176,34 @@ class MessageRepository:
             )
             > 0
         )
+
+    def add_reply(
+        self,
+        message_id: ObjectId,
+        recipient_id: ObjectId,
+        content: str,
+    ) -> dict[str, Any] | None:
+        now = datetime.now(timezone.utc)
+
+        result = self.collection.update_one(
+            {
+                "_id": message_id,
+                "recipient_id": recipient_id,
+                "is_deleted": False,
+                "reply": None,
+            },
+            {
+                "$set": {
+                    "reply": {
+                        "content": content,
+                        "created_at": now,
+                    },
+                    "updated_at": now,
+                }
+            },
+        )
+
+        if result.modified_count != 1:
+            return None
+
+        return self.get_by_id(message_id)

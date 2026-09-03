@@ -21,6 +21,7 @@ class MessageModel:
             "content": content,
             "is_read": False,
             "is_deleted": False,
+            "reply": None,
             "created_at": now,
             "updated_at": now,
         }
