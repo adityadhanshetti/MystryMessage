@@ -2,22 +2,22 @@ import { useQuery } from "@tanstack/react-query";
 
 import { apiRequest } from "../../lib/api";
 
-export const publicProfileKeys = {
-    all: ["public-profile"],
+export function useUsernameAvailability(username) {
+    const normalizedUsername = username.trim().toLowerCase();
 
-    byUsername: (username) => [...publicProfileKeys.all, username],
-};
-
-export function usePublicProfile(username) {
     return useQuery({
-        queryKey: publicProfileKeys.byUsername(username),
+        queryKey: ["username-availability", normalizedUsername],
 
         queryFn: () =>
-            apiRequest(`/users/public/${encodeURIComponent(username)}`),
+            apiRequest(
+                `/users/username/${encodeURIComponent(
+                    normalizedUsername,
+                )}/availability`,
+            ),
 
-        enabled: Boolean(username),
+        enabled: normalizedUsername.length >= 3,
 
-        staleTime: 60 * 1000,
+        staleTime: 10 * 1000,
 
         retry: false,
     });

@@ -1,3 +1,4 @@
+from clerk_backend_api.models import updateemailaddressop
 from bson import ObjectId
 from fastapi import HTTPException, status
 
@@ -125,7 +126,8 @@ class UserService:
                         },
                     },
                 )
-
+    
+            updates["username"] = username
             updates["username_normalized"] = username.lower()
 
         user = self.repository.update(

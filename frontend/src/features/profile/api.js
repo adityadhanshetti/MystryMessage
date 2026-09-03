@@ -1,5 +1,4 @@
 import { useAuth } from "@clerk/clerk-react";
-
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { apiRequest } from "../../lib/api";
@@ -29,7 +28,6 @@ export function useMyProfile() {
 
 export function useUpdateProfile() {
     const { getToken } = useAuth();
-
     const queryClient = useQueryClient();
 
     return useMutation({
