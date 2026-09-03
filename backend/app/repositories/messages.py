@@ -207,3 +207,20 @@ class MessageRepository:
             return None
 
         return self.get_by_id(message_id)
+
+    def get_conversation_messages(
+        self,
+        conversation_id: ObjectId,
+    ) -> list[dict[str, Any]]:
+        cursor = (
+            self.collection
+            .find(
+                {
+                    "conversation_id": conversation_id,
+                    "is_deleted": False,
+                }
+            )
+            .sort("created_at", 1)
+        )
+
+        return list(cursor)

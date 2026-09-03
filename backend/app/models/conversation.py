@@ -4,27 +4,22 @@ from typing import Any
 from bson import ObjectId
 
 
-class MessageModel:
-    collection_name = "messages"
+class ConversationModel:
+    collection_name = "conversations"
 
     @staticmethod
     def create_document(
         *,
-        conversation_id: ObjectId,
         recipient_id: ObjectId,
-        content: str,
-        sender: str,
+        token_hash: str,
     ) -> dict[str, Any]:
         now = datetime.now(timezone.utc)
 
         return {
             "_id": ObjectId(),
-            "conversation_id": conversation_id,
             "recipient_id": recipient_id,
-            "sender": sender,
-            "content": content,
-            "is_read": False,
-            "is_deleted": False,
+            "token_hash": token_hash,
+            "is_active": True,
             "created_at": now,
             "updated_at": now,
         }

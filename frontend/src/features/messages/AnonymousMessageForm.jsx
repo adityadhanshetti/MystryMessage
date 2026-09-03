@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import { useSendAnonymousMessage } from "./api";
+import { Link } from "@tanstack/react-router";
 
 const MAX_LENGTH = 1000;
 
@@ -24,7 +25,14 @@ export default function AnonymousMessageForm({ username }) {
                 content: message,
             },
             {
-                onSuccess: () => {
+                onSuccess: (response) => {
+                    const conversation = response.data;
+
+                    localStorage.setItem(
+                        `mystry-conversation-${conversation.conversation_id}`,
+                        conversation.conversation_token,
+                    );
+
                     setContent("");
                 },
             },
@@ -34,32 +42,45 @@ export default function AnonymousMessageForm({ username }) {
     const remaining = MAX_LENGTH - content.length;
 
     return (
-        <form onSubmit={handleSubmit}>
-            <textarea
-                value={content}
-                onChange={(event) => setContent(event.target.value)}
-                placeholder="Write something..."
-                maxLength={MAX_LENGTH}
-                rows={6}
-                disabled={sendMessage.isPending}
-            />
+        <>
+            <form onSubmit={handleSubmit}>
+                <textarea
+                    value={content}
+                    onChange={(event) => setContent(event.target.value)}
+                    placeholder="Write something..."
+                    maxLength={MAX_LENGTH}
+                    rows={6}
+                    disabled={sendMessage.isPending}
+                />
 
-            <div>
-                <span>
-                    {content.length}/{MAX_LENGTH}
-                </span>
-            </div>
+                <div>
+                    <span>
+                        {content.length}/{MAX_LENGTH}
+                    </span>
+                </div>
 
-            <button
-                type="submit"
-                disabled={sendMessage.isPending || !content.trim()}
-            >
-                {sendMessage.isPending ? "Sending..." : "Send anonymously"}
-            </button>
-
+                <button
+                    type="submit"
+                    disabled={sendMessage.isPending || !content.trim()}
+                >
+                    {sendMessage.isPending ? "Sending..." : "Send anonymously"}
+                </button>
+            </form>
             {sendMessage.isSuccess && <p>Your message was sent anonymously.</p>}
 
             {sendMessage.isError && <p>{sendMessage.error.message}</p>}
-        </form>
+
+            {sendMessage.isSuccess && (
+                <div>
+                    <p>Message sent anonymously.</p>
+
+                    <Link
+                        href={`/conversation/${sendMessage.data.data.conversation_id}`}
+                    >
+                        View anonymous conversation
+                    </Link>
+                </div>
+            )}
+        </>
     );
 }

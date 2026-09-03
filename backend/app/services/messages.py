@@ -5,6 +5,10 @@ from app.models.message import MessageModel
 from app.repositories.messages import MessageRepository
 from app.repositories.users import UserRepository
 from app.schemas.message import MessageCreate
+from app.services.conversations import ConversationService
+from app.repositories.conversations import (
+    ConversationRepository,
+)
 
 
 class MessageService:
@@ -12,51 +16,56 @@ class MessageService:
         self,
         message_repository: MessageRepository,
         user_repository: UserRepository,
+        conversation_repository: ConversationRepository,
     ) -> None:
         self.messages = message_repository
         self.users = user_repository
+        self.conversations = conversation_repository
 
-    def send_message(
-        self,
-        username: str,
-        payload: MessageCreate,
-    ) -> dict:
-        recipient = self.users.get_by_username(username)
+def send_message(
+    self,
+    username: str,
+    payload: MessageCreate,
+) -> tuple[dict, str]:
+    recipient = self.users.get_by_username(username)
 
-        if not recipient or not recipient.get("is_public", True):
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail={
-                    "success": False,
-                    "error": {
-                        "code": "PROFILE_NOT_FOUND",
-                        "message": "Profile not found.",
-                    },
+    if not recipient or not recipient.get(
+        "is_public",
+        True,
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail={
+                "success": False,
+                "error": {
+                    "code": "PROFILE_NOT_FOUND",
+                    "message": "Profile not found.",
                 },
-            )
-		
-        if self.messages.recent_duplicate_exists(
-            recipient["_id"],
-            payload.content,
-        ):
-            raise HTTPException(
-                status_code=status.HTTP_409_CONFLICT,
-                detail={
-                    "success": False,
-                    "error": {
-                        "code": "DUPLICATE_MESSAGE",
-                        "message": "This message was already sent recently.",
-                    },
-                },
-            )
-
-        document = MessageModel.create_document(
-            recipient_id=recipient["_id"],
-            content=payload.content,
+            },
         )
 
-        return self.messages.create(document)
+    conversation_service = ConversationService(
+        self.conversations
+    )
 
+    conversation, token = (
+        conversation_service.create(
+            recipient["_id"]
+        )
+    )
+
+    document = MessageModel.create_document(
+        conversation_id=conversation["_id"],
+        recipient_id=recipient["_id"],
+        content=payload.content,
+        sender="anonymous",
+    )
+
+    message = self.messages.create(
+        document
+    )
+
+    return message, token
     def get_inbox(
         self,
         recipient_id: str,

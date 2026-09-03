@@ -1,9 +1,11 @@
+from backend.app.repositories import conversations
 from pymongo.database import Database
 
 
 def create_indexes(database: Database) -> None:
     users = database["users"]
     messages = database["messages"]
+    conversations = database["conversations"]
 
     users.create_index(
         "clerk_user_id",
@@ -32,4 +34,18 @@ def create_indexes(database: Database) -> None:
             ("created_at", -1),
         ],
         name="idx_messages_recipient_read",
+    )
+
+    conversations.create_index(
+        "token_hash",
+        unique=True,
+        name="uq_conversations_token_hash",
+    )
+    
+    conversations.create_index(
+        [
+            ("recipient_id", 1),
+            ("created_at", -1),
+        ],
+        name="idx_conversations_recipient_created",
     )

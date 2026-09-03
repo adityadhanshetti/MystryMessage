@@ -50,3 +50,8 @@ class MessageReply(BaseModel):
             raise ValueError("Reply cannot be empty.")
 
         return value
+
+class AnonymousMessageResponse(BaseModel):
+    message_id: str
+    conversation_id: str
+    conversation_token: str

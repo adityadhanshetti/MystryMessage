@@ -1,12 +1,18 @@
 from fastapi import APIRouter, Depends, Query, status,Path,HTTPException,Request
 
+from bson import ObjectId
+
 from app.api.dependencies import CurrentClerkUser
 from app.db.mongodb import mongodb
 from app.repositories.messages import MessageRepository
 from app.repositories.users import UserRepository
+from app.repositories.conversations import (
+    ConversationRepository,
+)
 from app.schemas.message import MessageCreate
 from app.services.messages import MessageService
 from app.services.users import UserService
+from app.services.conversations import ConversationService
 
 from app.schemas.message import MessageCreate, MessageReply
 
@@ -23,8 +29,15 @@ def get_message_service() -> MessageService:
     database = mongodb.get_database()
 
     return MessageService(
-        message_repository=MessageRepository(database),
-        user_repository=UserRepository(database),
+        message_repository=MessageRepository(
+            database
+        ),
+        user_repository=UserRepository(
+            database
+        ),
+        conversation_repository=ConversationRepository(
+            database
+        ),
     )
 
 
@@ -60,18 +73,24 @@ def send_anonymous_message(
     _: None = Depends(check_anonymous_rate_limit),
     service: MessageService = Depends(get_message_service),
 ):
-    message = service.send_message(
+    message, conversation_token = (
+    service.send_message(
         username=username,
         payload=payload,
     )
+)
 
     return {
-        "success": True,
-        "data": {
-            "message": "Message sent successfully.",
-            "id": str(message["_id"]),
-        },
-    }
+    "success": True,
+    "data": {
+        "message": "Message sent successfully.",
+        "message_id": str(message["_id"]),
+        "conversation_id": str(
+            message["conversation_id"]
+        ),
+        "conversation_token": conversation_token,
+    },
+}
 
 
 @router.get("/inbox")
@@ -196,4 +215,70 @@ def reply_to_message(
             "id": str(message["_id"]),
             "message": "Reply sent successfully.",
         },
+    }
+
+@router.get("/conversations/{conversation_id}")
+def get_anonymous_conversation(
+    conversation_id: str,
+    token: str,
+    service: MessageService = Depends(
+        get_message_service
+    ),
+):
+    try:
+        conversation_object_id = ObjectId(
+            conversation_id
+        )
+    except Exception as exc:
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "success": False,
+                "error": {
+                    "code": "INVALID_CONVERSATION_ID",
+                    "message": "Invalid conversation ID.",
+                },
+            },
+        ) from exc
+
+    conversation = (
+        ConversationService(
+            service.conversations
+        ).get_by_token(token)
+    )
+
+    if (
+        not conversation
+        or conversation["_id"]
+        != conversation_object_id
+    ):
+        raise HTTPException(
+            status_code=403,
+            detail={
+                "success": False,
+                "error": {
+                    "code": "INVALID_CONVERSATION_ACCESS",
+                    "message": "Conversation access denied.",
+                },
+            },
+        )
+
+    messages = (
+        service.messages
+        .get_conversation_messages(
+            conversation_object_id
+        )
+    )
+
+    return {
+        "success": True,
+        "data": [
+            {
+                "id": str(message["_id"]),
+                "content": message["content"],
+                "sender": message["sender"],
+                "created_at": message["created_at"],
+            }
+            for message in messages
+        ],
     }
