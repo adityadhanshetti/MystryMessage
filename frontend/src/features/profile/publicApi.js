@@ -22,3 +22,16 @@ export function useUsernameAvailability(username) {
         retry: false,
     });
 }
+
+export function publicProfileQuery(username) {
+    return {
+        queryKey: publicProfileKeys.byUsername(username),
+
+        queryFn: () =>
+            apiRequest(`/users/public/${encodeURIComponent(username)}`),
+
+        staleTime: 60 * 1000,
+
+        retry: false,
+    };
+}

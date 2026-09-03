@@ -1,10 +1,12 @@
 import { useState } from "react";
 
+import { getProfileUrl } from "../../lib/profile";
+
 export default function CopyProfileLink({ username }) {
     const [copied, setCopied] = useState(false);
 
     async function handleCopy() {
-        const url = `${window.location.origin}/${username}`;
+        const url = getProfileUrl(username);
 
         try {
             await navigator.clipboard.writeText(url);
@@ -20,8 +22,8 @@ export default function CopyProfileLink({ username }) {
     }
 
     return (
-        <button onClick={handleCopy}>
-            {copied ? "Copied!" : "Copy my link"}
+        <button type="button" onClick={handleCopy}>
+            {copied ? "Link copied" : "Copy my link"}
         </button>
     );
 }

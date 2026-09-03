@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { useMyProfile, useUpdateProfile } from "./api";
 
 import CopyProfileLink from "./CopyProfileLink";
+import ShareProfile from "./ShareProfile";
+import ProfileQRCode from "./ProfileQRCode";
 
 export default function Profile() {
     const { data, isLoading, isError, error } = useMyProfile();
@@ -55,50 +57,61 @@ export default function Profile() {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
+        <>
+            <form onSubmit={handleSubmit}>
+                <div>
+                    <label>Username</label>
+
+                    <input
+                        name="username"
+                        value={form.username}
+                        onChange={handleChange}
+                        minLength={3}
+                        maxLength={30}
+                    />
+                </div>
+
+                <div>
+                    <label>Display name</label>
+
+                    <input
+                        name="display_name"
+                        value={form.display_name}
+                        onChange={handleChange}
+                        maxLength={80}
+                    />
+                </div>
+
+                <div>
+                    <label>Bio</label>
+
+                    <textarea
+                        name="bio"
+                        value={form.bio}
+                        onChange={handleChange}
+                        maxLength={300}
+                        rows={4}
+                    />
+                </div>
+
+                <button type="submit" disabled={updateProfile.isPending}>
+                    {updateProfile.isPending ? "Saving..." : "Save changes"}
+                </button>
+                <CopyProfileLink username={form.username} />
+
+                {updateProfile.isSuccess && (
+                    <p>Profile updated successfully.</p>
+                )}
+
+                {updateProfile.isError && <p>{updateProfile.error.message}</p>}
+            </form>
             <div>
-                <label>Username</label>
+                <CopyProfileLink username={form.username} />
 
-                <input
-                    name="username"
-                    value={form.username}
-                    onChange={handleChange}
-                    minLength={3}
-                    maxLength={30}
-                />
+                <ShareProfile username={form.username} />
+
+                <ProfileQRCode username={form.username} />
             </div>
-
-            <div>
-                <label>Display name</label>
-
-                <input
-                    name="display_name"
-                    value={form.display_name}
-                    onChange={handleChange}
-                    maxLength={80}
-                />
-            </div>
-
-            <div>
-                <label>Bio</label>
-
-                <textarea
-                    name="bio"
-                    value={form.bio}
-                    onChange={handleChange}
-                    maxLength={300}
-                    rows={4}
-                />
-            </div>
-
-            <button type="submit" disabled={updateProfile.isPending}>
-                {updateProfile.isPending ? "Saving..." : "Save changes"}
-            </button>
-            <CopyProfileLink username={form.username} />
-
-            {updateProfile.isSuccess && <p>Profile updated successfully.</p>}
-
-            {updateProfile.isError && <p>{updateProfile.error.message}</p>}
-        </form>
+        </>
     );
 }
