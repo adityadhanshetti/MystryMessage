@@ -16,11 +16,14 @@ class MongoDB:
             "serverSelectionTimeoutMS": 5000,
         }
 
-        try:
-            import certifi
-            mongo_kwargs["tlsCAFile"] = certifi.where()
-        except ImportError:
-            pass
+        # Only use TLS CA file when connecting to remote SSL MongoDB instances (like MongoDB Atlas)
+        uri = settings.mongodb_uri.lower()
+        if "mongodb+srv" in uri or "tls=true" in uri or "ssl=true" in uri:
+            try:
+                import certifi
+                mongo_kwargs["tlsCAFile"] = certifi.where()
+            except ImportError:
+                pass
 
         self.client = MongoClient(
             settings.mongodb_uri,

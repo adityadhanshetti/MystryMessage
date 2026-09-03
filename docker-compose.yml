@@ -42,8 +42,8 @@ services:
       - MONGODB_URI=mongodb://mongodb:27017/
       - MONGODB_DATABASE=${MONGODB_DATABASE:-mystry-message}
       - REDIS_URL=redis://redis:6379/0
-      - CLERK_AUTHORIZED_PARTIES=${CLERK_AUTHORIZED_PARTIES:-http://localhost:5173,http://localhost:3000}
-      - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost:5173,http://localhost:3000}
+      - CLERK_AUTHORIZED_PARTIES=${CLERK_AUTHORIZED_PARTIES:-http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173,http://127.0.0.1:3000}
+      - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173,http://127.0.0.1:3000}
       - LOG_LEVEL=INFO
     depends_on:
       mongodb:

@@ -101,19 +101,39 @@ class Settings(BaseSettings):
 
     @property
     def cors_origin_list(self) -> list[str]:
-        return [
+        origins = [
             origin.strip()
             for origin in self.cors_origins.split(",")
             if origin.strip()
         ]
+        defaults = [
+            "http://localhost:3000",
+            "http://localhost:5173",
+            "http://127.0.0.1:3000",
+            "http://127.0.0.1:5173",
+        ]
+        for d in defaults:
+            if d not in origins:
+                origins.append(d)
+        return origins
 
     @property
     def clerk_authorized_party_list(self) -> list[str]:
-        return [
+        parties = [
             origin.strip()
             for origin in self.clerk_authorized_parties.split(",")
             if origin.strip()
         ]
+        defaults = [
+            "http://localhost:3000",
+            "http://localhost:5173",
+            "http://127.0.0.1:3000",
+            "http://127.0.0.1:5173",
+        ]
+        for d in defaults:
+            if d not in parties:
+                parties.append(d)
+        return parties
 
     @property
     def is_production(self) -> bool:

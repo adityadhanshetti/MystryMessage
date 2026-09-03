@@ -58,14 +58,19 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origin_list,
+    allow_origin_regex=r"^https?://(localhost|127\.0\.0\.1)(:\d+)?$|^https://.*\.vercel\.app$",
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allow_headers=["Authorization", "Content-Type", "X-Conversation-Token"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=["*"],
 )
 
 
 @app.middleware("http")
 async def request_id_and_security_middleware(request, call_next):
+    if request.method == "OPTIONS":
+        return await call_next(request)
+
     import uuid
     request_id = request.headers.get("X-Request-ID", str(uuid.uuid4()))
     response = await call_next(request)
