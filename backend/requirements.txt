@@ -8,3 +8,6 @@ httpx
 pytest
 pytest-asyncio
 clerk-backend-api
+redis
+cloudinary
+certifi

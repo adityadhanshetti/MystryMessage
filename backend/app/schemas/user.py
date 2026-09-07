@@ -44,6 +44,7 @@ class UserResponse(BaseModel):
     bio: str
     avatar_url: str
     is_public: bool
+    accept_messages: bool = True
 
 
 class ProfileUpdate(BaseModel):
@@ -62,6 +63,8 @@ class ProfileUpdate(BaseModel):
     avatar_url: str | None = None
 
     is_public: bool | None = None
+
+    accept_messages: bool | None = None
 
     @field_validator("username")
     @classmethod

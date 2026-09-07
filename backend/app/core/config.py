@@ -43,13 +43,38 @@ class Settings(BaseSettings):
     )
 
     clerk_authorized_parties: str = Field(
-        default="http://localhost:5173",
+        default="",
         alias="CLERK_AUTHORIZED_PARTIES",
     )
 
     cors_origins: str = Field(
         default="http://localhost:5173",
         alias="CORS_ORIGINS",
+    )
+
+    redis_url: str | None = Field(
+        default=None,
+        alias="REDIS_URL",
+    )
+
+    cloudinary_cloud_name: str | None = Field(
+        default=None,
+        alias="CLOUDINARY_CLOUD_NAME",
+    )
+
+    cloudinary_api_key: str | None = Field(
+        default=None,
+        alias="CLOUDINARY_API_KEY",
+    )
+
+    cloudinary_api_secret: str | None = Field(
+        default=None,
+        alias="CLOUDINARY_API_SECRET",
+    )
+
+    cloudinary_upload_preset: str | None = Field(
+        default=None,
+        alias="CLOUDINARY_UPLOAD_PRESET",
     )
 
     log_level: str = Field(
@@ -64,16 +89,39 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
+    rate_limit_window_seconds: int = Field(
+        default=60,
+        alias="RATE_LIMIT_WINDOW_SECONDS",
+    )
+
+    rate_limit_max_requests: int = Field(
+        default=5,
+        alias="RATE_LIMIT_MAX_REQUESTS",
+    )
+
     @property
     def cors_origin_list(self) -> list[str]:
-        return [
+        origins = [
             origin.strip()
             for origin in self.cors_origins.split(",")
             if origin.strip()
         ]
+        defaults = [
+            "http://localhost:3000",
+            "http://localhost:5173",
+            "http://127.0.0.1:3000",
+            "http://127.0.0.1:5173",
+        ]
+        for d in defaults:
+            if d not in origins:
+                origins.append(d)
+        return origins
 
     @property
     def clerk_authorized_party_list(self) -> list[str]:
+        if not self.clerk_authorized_parties or self.clerk_authorized_parties.strip() == "*":
+            return []
+
         return [
             origin.strip()
             for origin in self.clerk_authorized_parties.split(",")

@@ -1,3 +1,4 @@
+import logging
 from typing import Annotated
 
 from clerk_backend_api import (
@@ -8,6 +9,8 @@ from clerk_backend_api.security.types import RequestState
 from fastapi import Depends, HTTPException, Request, status
 
 from app.core.config import Settings, get_settings
+
+logger = logging.getLogger(__name__)
 
 
 def require_auth(
@@ -28,21 +31,30 @@ def require_auth(
     the authenticated request state.
     """
 
+    auth_kwargs = {
+        "secret_key": settings.clerk_secret_key,
+        "accepts_token": ["session_token"],
+    }
+
+    if settings.clerk_jwt_key:
+        auth_kwargs["jwt_key"] = settings.clerk_jwt_key.replace("\\n", "\n").strip()
+
+    # Only pass authorized_parties if explicitly configured in settings
+    if settings.clerk_authorized_party_list:
+        parties = list(settings.clerk_authorized_party_list)
+        origin = request.headers.get("origin")
+        if origin and origin not in parties:
+            parties.append(origin)
+        auth_kwargs["authorized_parties"] = parties
+
     try:
         state = authenticate_request(
             request,
-            AuthenticateRequestOptions(
-                secret_key=settings.clerk_secret_key,
-                jwt_key=settings.clerk_jwt_key,
-                authorized_parties=(
-                    settings.clerk_authorized_party_list
-                ),
-                accepts_token=["session_token"],
-            ),
+            AuthenticateRequestOptions(**auth_kwargs),
         )
 
     except Exception as exc:
-        # Never expose Clerk/internal authentication errors.
+        logger.warning("Clerk authenticate_request exception: %s", exc)
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail={
@@ -55,13 +67,20 @@ def require_auth(
         ) from exc
 
     if not state.is_signed_in:
+        reason = getattr(state, "reason", "unauthenticated")
+        logger.warning(
+            "Clerk auth rejected: reason=%s, origin=%s, has_bearer=%s",
+            reason,
+            request.headers.get("origin"),
+            bool(request.headers.get("authorization")),
+        )
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail={
                 "success": False,
                 "error": {
                     "code": "UNAUTHENTICATED",
-                    "message": "Authentication is required.",
+                    "message": f"Authentication is required ({reason}).",
                 },
             },
         )
@@ -85,7 +104,8 @@ def get_current_clerk_user_id(
     `sub` is taken only AFTER Clerk validates the token.
     """
 
-    user_id = auth_state.payload.get("sub")
+    payload = auth_state.payload or {}
+    user_id = payload.get("sub")
 
     if not user_id:
         raise HTTPException(

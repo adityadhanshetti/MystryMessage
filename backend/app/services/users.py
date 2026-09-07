@@ -14,7 +14,7 @@ class UserService:
     ) -> None:
         self.repository = repository
 
-    async def get_or_create_user(
+    def get_or_create_user(
         self,
         clerk_user_id: str,
     ) -> dict:
@@ -25,7 +25,7 @@ class UserService:
         if existing:
             return existing
 
-        clerk_user = await clerk_service.get_user(
+        clerk_user = clerk_service.get_user(
             clerk_user_id
         )
 
@@ -125,7 +125,8 @@ class UserService:
                         },
                     },
                 )
-
+    
+            updates["username"] = username
             updates["username_normalized"] = username.lower()
 
         user = self.repository.update(

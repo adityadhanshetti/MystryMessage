@@ -8,9 +8,8 @@ export const Route = createFileRoute("/_authenticated/profile")({
 
 function ProfilePage() {
     return (
-        <main>
-            <h1>My Profile</h1>
+        <section>
             <Profile />
-        </main>
+        </section>
     );
 }

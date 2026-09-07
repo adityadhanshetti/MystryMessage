@@ -34,6 +34,7 @@ class UserModel:
             "bio": bio,
             "avatar_url": avatar_url,
             "is_public": True,
+            "accept_messages": True,
             "created_at": now,
             "updated_at": now,
         }
