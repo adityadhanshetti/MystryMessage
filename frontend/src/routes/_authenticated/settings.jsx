@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useSelector, useDispatch } from "react-redux";
 import { setTheme } from "../../store/uiSlice";
 import { useMyProfile, useUpdateProfile } from "../../features/profile/api";
+import { MonitorIcon, MoonIcon, SunIcon } from "../../components/icons";
 
 export const Route = createFileRoute("/_authenticated/settings")({
     component: SettingsPage,
@@ -39,10 +40,10 @@ function SettingsPage() {
     if (isLoading) {
         return (
             <div className="w-full max-w-2xl mx-auto space-y-4 animate-pulse">
-                <div className="h-6 bg-slate-800 rounded w-1/4" />
+                <div className="h-6 bg-slate-300 dark:bg-slate-800 rounded w-1/4" />
                 <div className="surface-panel p-6 rounded-2xl space-y-4">
-                    <div className="h-10 bg-slate-800 rounded" />
-                    <div className="h-10 bg-slate-800 rounded" />
+                    <div className="h-10 bg-slate-300 dark:bg-slate-800 rounded" />
+                    <div className="h-10 bg-slate-300 dark:bg-slate-800 rounded" />
                 </div>
             </div>
         );
@@ -76,13 +77,19 @@ function SettingsPage() {
         });
     }
 
+    const THEME_OPTIONS = [
+        { id: "system", label: "System", icon: MonitorIcon },
+        { id: "dark", label: "Dark", icon: MoonIcon },
+        { id: "light", label: "Light", icon: SunIcon },
+    ];
+
     return (
         <div className="w-full max-w-2xl mx-auto space-y-6">
-            <div className="pb-5 border-b border-white/[0.08]">
-                <h1 className="text-2xl font-bold tracking-tight text-white">
+            <div className="pb-5 border-b border-slate-200 dark:border-white/[0.08]">
+                <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
                     Settings
                 </h1>
-                <p className="text-xs text-slate-400 mt-1">
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                     Privacy controls, messaging availability, and display preferences.
                 </p>
             </div>
@@ -90,17 +97,17 @@ function SettingsPage() {
             <form onSubmit={handleSubmit} className="space-y-5">
                 {/* Privacy Panel */}
                 <div className="surface-panel p-5 sm:p-6 rounded-2xl space-y-5">
-                    <h2 className="text-sm font-bold text-white border-b border-white/[0.08] pb-3">
+                    <h2 className="text-sm font-bold text-slate-900 dark:text-white border-b border-slate-200 dark:border-white/[0.08] pb-3">
                         Privacy & Safety
                     </h2>
 
                     {/* Accept Messages Toggle */}
                     <div className="flex items-center justify-between gap-4">
                         <div>
-                            <label className="text-xs font-semibold text-white block">
+                            <label className="text-xs font-semibold text-slate-800 dark:text-white block">
                                 Allow Anonymous Messages
                             </label>
-                            <p className="text-[11px] text-slate-400 mt-0.5 leading-relaxed">
+                            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">
                                 When turned off, visitors to your profile cannot send
                                 messages or start threads.
                             </p>
@@ -113,17 +120,17 @@ function SettingsPage() {
                                 onChange={handleChange}
                                 className="sr-only peer"
                             />
-                            <div className="w-10 h-5.5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4.5 after:w-4.5 after:transition-all peer-checked:bg-indigo-600" />
+                            <div className="w-10 h-5.5 bg-slate-300 dark:bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4.5 after:w-4.5 after:transition-all peer-checked:bg-indigo-600" />
                         </label>
                     </div>
 
                     {/* Public Profile Toggle */}
-                    <div className="flex items-center justify-between gap-4 pt-4 border-t border-white/[0.08]">
+                    <div className="flex items-center justify-between gap-4 pt-4 border-t border-slate-200 dark:border-white/[0.08]">
                         <div>
-                            <label className="text-xs font-semibold text-white block">
+                            <label className="text-xs font-semibold text-slate-800 dark:text-white block">
                                 Public Profile Visibility
                             </label>
-                            <p className="text-[11px] text-slate-400 mt-0.5 leading-relaxed">
+                            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">
                                 Allows your public handle to be resolved by anyone with
                                 your link.
                             </p>
@@ -136,38 +143,35 @@ function SettingsPage() {
                                 onChange={handleChange}
                                 className="sr-only peer"
                             />
-                            <div className="w-10 h-5.5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4.5 after:w-4.5 after:transition-all peer-checked:bg-indigo-600" />
+                            <div className="w-10 h-5.5 bg-slate-300 dark:bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4.5 after:w-4.5 after:transition-all peer-checked:bg-indigo-600" />
                         </label>
                     </div>
                 </div>
 
                 {/* Appearance Panel */}
                 <div className="surface-panel p-5 sm:p-6 rounded-2xl space-y-4">
-                    <h2 className="text-sm font-bold text-white border-b border-white/[0.08] pb-3">
+                    <h2 className="text-sm font-bold text-slate-900 dark:text-white border-b border-slate-200 dark:border-white/[0.08] pb-3">
                         Appearance
                     </h2>
 
                     <div>
-                        <label className="text-xs font-semibold text-white block mb-2">
+                        <label className="text-xs font-semibold text-slate-800 dark:text-white block mb-2">
                             Theme Mode
                         </label>
-                        <div className="grid grid-cols-3 gap-2">
-                            {[
-                                { id: "system", label: "System" },
-                                { id: "dark", label: "Dark" },
-                                { id: "light", label: "Light" },
-                            ].map(({ id, label }) => (
+                        <div className="grid grid-cols-3 gap-2 sm:gap-3">
+                            {THEME_OPTIONS.map(({ id, label, icon: Icon }) => (
                                 <button
                                     type="button"
                                     key={id}
                                     onClick={() => dispatch(setTheme(id))}
-                                    className={`py-2 px-3 rounded-xl text-xs font-semibold transition-all cursor-pointer border ${
+                                    className={`py-3 px-3 rounded-xl text-xs font-semibold transition-all cursor-pointer border flex flex-col sm:flex-row items-center justify-center gap-2 ${
                                         currentTheme === id
-                                            ? "bg-white/[0.12] text-white border-white/[0.15] shadow-sm"
-                                            : "btn-secondary text-slate-400 hover:text-white"
+                                            ? "bg-indigo-600 text-white border-indigo-500 shadow-sm"
+                                            : "btn-secondary text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
                                     }`}
                                 >
-                                    {label}
+                                    <Icon className="w-4 h-4" />
+                                    <span>{label}</span>
                                 </button>
                             ))}
                         </div>
@@ -185,7 +189,7 @@ function SettingsPage() {
                     </button>
 
                     {updateProfile.isSuccess && (
-                        <span className="text-xs text-emerald-400 font-medium">
+                        <span className="text-xs text-emerald-500 font-medium">
                             ✓ Settings saved
                         </span>
                     )}

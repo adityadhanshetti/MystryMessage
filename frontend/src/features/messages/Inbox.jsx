@@ -64,12 +64,12 @@ export default function Inbox() {
     return (
         <div className="w-full max-w-4xl mx-auto space-y-6">
             {/* Header section */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-white/[0.08]">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-200 dark:border-white/[0.08]">
                 <div>
-                    <h1 className="text-2xl font-bold tracking-tight text-white">
+                    <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
                         Inbox
                     </h1>
-                    <p className="text-xs text-slate-400 mt-1">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                         Anonymous questions, feedback, and two-way conversations.
                     </p>
                 </div>
@@ -82,7 +82,7 @@ export default function Inbox() {
                             disabled={markAllRead.isPending}
                             className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg btn-secondary font-medium cursor-pointer disabled:opacity-50"
                         >
-                            <CheckIcon className="w-3.5 h-3.5 text-slate-400" />
+                            <CheckIcon className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
                             <span>
                                 {markAllRead.isPending
                                     ? "Marking..."
@@ -91,8 +91,8 @@ export default function Inbox() {
                         </button>
                     )}
 
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">
-                        <span className="w-1.5 h-1.5 rounded-full bg-indigo-400" />
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-500/20">
+                        <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
                         <span>{unreadCount} unread</span>
                     </div>
                 </div>
@@ -100,7 +100,7 @@ export default function Inbox() {
 
             {/* Controls Bar: Filter Tabs + Search Bar */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div className="flex items-center gap-1 p-1 rounded-xl bg-slate-900/90 border border-white/[0.08] w-fit">
+                <div className="flex items-center gap-1 p-1 rounded-xl bg-slate-200/60 dark:bg-slate-900/90 border border-slate-300/60 dark:border-white/[0.08] w-fit">
                     {["all", "unread", "read"].map((tab) => (
                         <button
                             key={tab}
@@ -108,8 +108,8 @@ export default function Inbox() {
                             onClick={() => handleFilterChange(tab)}
                             className={`px-3.5 py-1.5 text-xs font-semibold rounded-lg capitalize transition-all cursor-pointer ${
                                 activeFilter === tab
-                                    ? "bg-white/[0.12] text-white shadow-sm border border-white/[0.08]"
-                                    : "text-slate-400 hover:text-white hover:bg-white/[0.04]"
+                                    ? "bg-white text-slate-900 shadow-sm border border-slate-200 dark:bg-white/[0.12] dark:text-white dark:border-white/[0.08]"
+                                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/50 dark:text-slate-400 dark:hover:text-white dark:hover:bg-white/[0.04]"
                             }`}
                         >
                             {tab}
@@ -130,7 +130,7 @@ export default function Inbox() {
                         <button
                             type="button"
                             onClick={() => setSearchTerm("")}
-                            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs"
+                            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 dark:hover:text-white text-xs"
                         >
                             ✕
                         </button>
@@ -146,8 +146,8 @@ export default function Inbox() {
                             key={n}
                             className="surface-panel p-5 rounded-2xl animate-pulse space-y-3"
                         >
-                            <div className="h-4 bg-slate-800/80 rounded w-1/4" />
-                            <div className="h-4 bg-slate-800/60 rounded w-3/4" />
+                            <div className="h-4 bg-slate-200 dark:bg-slate-800/80 rounded w-1/4" />
+                            <div className="h-4 bg-slate-200 dark:bg-slate-800/60 rounded w-3/4" />
                         </div>
                     ))}
                 </div>
@@ -165,14 +165,14 @@ export default function Inbox() {
 
             {/* Empty state */}
             {!isLoading && !isError && conversations.length === 0 && (
-                <div className="text-center py-16 px-4 rounded-2xl surface-panel border border-white/[0.08]">
-                    <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mx-auto mb-4 text-indigo-400">
+                <div className="text-center py-16 px-4 rounded-2xl surface-panel border border-slate-200/80 dark:border-white/[0.08]">
+                    <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mx-auto mb-4 text-indigo-500">
                         <MessageSquareIcon className="w-6 h-6" />
                     </div>
-                    <h3 className="text-base font-bold text-white">
+                    <h3 className="text-base font-bold text-slate-900 dark:text-white">
                         No conversations yet
                     </h3>
-                    <p className="text-xs text-slate-400 max-w-sm mx-auto mt-1.5 mb-5 leading-relaxed">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto mt-1.5 mb-5 leading-relaxed">
                         Share your Mystry profile link with friends or on social
                         media to receive anonymous questions.
                     </p>
@@ -211,10 +211,10 @@ export default function Inbox() {
                         return (
                             <div
                                 key={c.id}
-                                className={`surface-card p-4 sm:p-5 rounded-2xl relative group border ${
+                                className={`surface-card p-4 sm:p-5 rounded-2xl relative group border transition-all ${
                                     isUnread
-                                        ? "border-l-4 border-l-indigo-500 border-white/[0.1] bg-slate-900/60"
-                                        : "border-white/[0.06]"
+                                        ? "border-l-4 border-l-indigo-500 border-indigo-200/80 dark:border-white/[0.1] bg-indigo-50/40 dark:bg-slate-900/60"
+                                        : "border-slate-200/80 dark:border-white/[0.06]"
                                 }`}
                             >
                                 <div className="flex items-start justify-between gap-4">
@@ -223,11 +223,11 @@ export default function Inbox() {
                                         params={{ conversationId: c.id }}
                                         className="flex-1 min-w-0"
                                     >
-                                        <div className="flex items-center gap-2 mb-1.5">
+                                        <div className="flex items-center gap-2 mb-1.5 flex-wrap">
                                             {isUnread && (
-                                                <span className="w-2 h-2 rounded-full bg-indigo-400 inline-block shrink-0" />
+                                                <span className="w-2 h-2 rounded-full bg-indigo-500 inline-block shrink-0" />
                                             )}
-                                            <span className="text-xs font-semibold text-slate-200">
+                                            <span className="text-xs font-semibold text-slate-800 dark:text-slate-200">
                                                 {c.last_message_sender ===
                                                 "anonymous"
                                                     ? "Anonymous Sender"
@@ -236,20 +236,20 @@ export default function Inbox() {
                                             <span className="text-[11px] text-slate-500">
                                                 • {dateFormatted}
                                             </span>
-                                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/[0.05] text-slate-400 font-mono">
+                                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/[0.05] text-slate-600 dark:text-slate-400 font-mono">
                                                 {c.message_count}{" "}
                                                 {c.message_count === 1
                                                     ? "msg"
                                                     : "msgs"}
                                             </span>
                                             {!c.is_active && (
-                                                <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400/90 border border-amber-500/20 font-medium">
+                                                <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400/90 border border-amber-500/20 font-medium">
                                                     Closed
                                                 </span>
                                             )}
                                         </div>
 
-                                        <p className="text-sm text-slate-300 group-hover:text-white transition-colors line-clamp-2 leading-relaxed">
+                                        <p className="text-sm text-slate-600 dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-white transition-colors line-clamp-2 leading-relaxed">
                                             {c.last_message_content ||
                                                 "View conversation thread..."}
                                         </p>
@@ -271,7 +271,7 @@ export default function Inbox() {
                                                             : "",
                                                 })
                                             }
-                                            className="p-2 rounded-lg bg-white/[0.04] hover:bg-indigo-500/10 hover:text-indigo-300 text-slate-400 text-xs transition-colors cursor-pointer"
+                                            className="p-2 rounded-lg bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 dark:bg-white/[0.04] dark:hover:bg-indigo-500/10 dark:hover:text-indigo-300 text-slate-500 dark:text-slate-400 text-xs transition-colors cursor-pointer"
                                         >
                                             <ShareIcon className="w-3.5 h-3.5" />
                                         </button>
@@ -284,7 +284,7 @@ export default function Inbox() {
                                                     markRead.mutate(c.id)
                                                 }
                                                 disabled={markRead.isPending}
-                                                className="p-2 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 text-xs transition-colors cursor-pointer"
+                                                className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-white/[0.04] dark:hover:bg-white/[0.08] text-slate-600 dark:text-slate-300 text-xs transition-colors cursor-pointer"
                                             >
                                                 <CheckIcon className="w-3.5 h-3.5" />
                                             </button>
@@ -297,7 +297,7 @@ export default function Inbox() {
                                                     closeConv.mutate(c.id)
                                                 }
                                                 disabled={closeConv.isPending}
-                                                className="p-2 rounded-lg bg-white/[0.04] hover:bg-red-500/10 hover:text-red-300 text-slate-400 text-xs transition-colors cursor-pointer"
+                                                className="p-2 rounded-lg bg-slate-100 hover:bg-red-50 hover:text-red-600 dark:bg-white/[0.04] dark:hover:bg-red-500/10 dark:hover:text-red-300 text-slate-500 dark:text-slate-400 text-xs transition-colors cursor-pointer"
                                             >
                                                 <CloseIcon className="w-3.5 h-3.5" />
                                             </button>
@@ -321,7 +321,7 @@ export default function Inbox() {
 
                     {/* Pagination */}
                     {totalPages > 1 && (
-                        <div className="flex items-center justify-between pt-4 border-t border-white/[0.06] text-xs text-slate-400">
+                        <div className="flex items-center justify-between pt-4 border-t border-slate-200/80 dark:border-white/[0.06] text-xs text-slate-500 dark:text-slate-400">
                             <button
                                 type="button"
                                 onClick={() =>

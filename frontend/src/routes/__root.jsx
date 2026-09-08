@@ -1,4 +1,5 @@
 import { createRootRoute, Outlet } from "@tanstack/react-router";
+import ThemeWatcher from "../components/ThemeWatcher";
 
 export const Route = createRootRoute({
     component: RootLayout,
@@ -6,7 +7,8 @@ export const Route = createRootRoute({
 
 function RootLayout() {
     return (
-        <div>
+        <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] transition-colors duration-150">
+            <ThemeWatcher />
             <Outlet />
         </div>
     );

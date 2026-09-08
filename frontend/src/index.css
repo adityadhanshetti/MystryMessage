@@ -1,21 +1,90 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
   :root {
     --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    
+    /* Light Mode Design Tokens (Default) */
+    --bg-primary: #f8fafc;
+    --bg-surface: #ffffff;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #64748b;
+    --border-subtle: rgba(15, 23, 42, 0.08);
+    --border-hover: rgba(99, 102, 241, 0.35);
+    
+    --panel-bg: rgba(255, 255, 255, 0.82);
+    --panel-border: rgba(15, 23, 42, 0.08);
+    --panel-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 0 0 1px rgba(15, 23, 42, 0.03);
+    
+    --card-bg: rgba(255, 255, 255, 0.75);
+    --card-border: rgba(15, 23, 42, 0.06);
+    --card-hover-bg: #ffffff;
+    --card-hover-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(99, 102, 241, 0.2);
+    
+    --input-bg: rgba(255, 255, 255, 0.95);
+    --input-focus-bg: #ffffff;
+    --input-border: rgba(15, 23, 42, 0.12);
+    --input-text: #0f172a;
+    
+    --btn-sec-bg: rgba(15, 23, 42, 0.04);
+    --btn-sec-hover-bg: rgba(15, 23, 42, 0.08);
+    --btn-sec-border: rgba(15, 23, 42, 0.1);
+    --btn-sec-text: #334155;
+    --btn-sec-text-hover: #0f172a;
+    
+    --grid-dot: rgba(15, 23, 42, 0.06);
+    --scrollbar-track: rgba(241, 245, 249, 0.8);
+    --scrollbar-thumb: rgba(15, 23, 42, 0.15);
+    --scrollbar-thumb-hover: rgba(15, 23, 42, 0.28);
+  }
+
+  .dark {
+    /* Dark Mode Design Tokens */
     --bg-primary: #080b11;
     --bg-surface: #0f1523;
-    --bg-card: rgba(17, 24, 39, 0.7);
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
     --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-hover: rgba(99, 102, 241, 0.25);
+    
+    --panel-bg: rgba(15, 21, 35, 0.75);
+    --panel-border: rgba(255, 255, 255, 0.08);
+    --panel-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+    
+    --card-bg: rgba(18, 26, 43, 0.55);
+    --card-border: rgba(255, 255, 255, 0.06);
+    --card-hover-bg: rgba(22, 32, 53, 0.7);
+    --card-hover-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(99, 102, 241, 0.15);
+    
+    --input-bg: rgba(11, 16, 27, 0.85);
+    --input-focus-bg: rgba(11, 16, 27, 0.95);
+    --input-border: rgba(255, 255, 255, 0.1);
+    --input-text: #f8fafc;
+    
+    --btn-sec-bg: rgba(255, 255, 255, 0.05);
+    --btn-sec-hover-bg: rgba(255, 255, 255, 0.09);
+    --btn-sec-border: rgba(255, 255, 255, 0.1);
+    --btn-sec-text: #e2e8f0;
+    --btn-sec-text-hover: #ffffff;
+    
+    --grid-dot: rgba(255, 255, 255, 0.06);
+    --scrollbar-track: rgba(8, 11, 17, 0.5);
+    --scrollbar-thumb: rgba(255, 255, 255, 0.14);
+    --scrollbar-thumb-hover: rgba(255, 255, 255, 0.25);
   }
 
   body {
     font-family: var(--font-body);
     background-color: var(--bg-primary);
-    color: #f1f5f9;
+    color: var(--text-primary);
     letter-spacing: -0.01em;
     overflow-x: hidden;
+    transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -29,44 +98,45 @@
 .bg-grid-pattern {
   background-size: 32px 32px;
   background-image: 
-    radial-gradient(circle, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+    radial-gradient(circle, var(--grid-dot) 1px, transparent 1px);
 }
 
 /* Premium Surface Panels */
 .surface-panel {
-  background: rgba(15, 21, 35, 0.75);
+  background: var(--panel-bg);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--panel-border);
+  box-shadow: var(--panel-shadow);
+  transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .surface-card {
-  background: rgba(18, 26, 43, 0.55);
+  background: var(--card-bg);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--card-border);
   transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .surface-card:hover {
-  background: rgba(22, 32, 53, 0.7);
-  border-color: rgba(99, 102, 241, 0.25);
+  background: var(--card-hover-bg);
+  border-color: var(--border-hover);
   transform: translateY(-1px);
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(99, 102, 241, 0.15);
+  box-shadow: var(--card-hover-shadow);
 }
 
 .surface-input {
-  background: rgba(11, 16, 27, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #f8fafc;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  color: var(--input-text);
   transition: all 0.15s ease;
 }
 
 .surface-input:focus {
   outline: none;
   border-color: #6366f1;
-  background: rgba(11, 16, 27, 0.95);
+  background: var(--input-focus-bg);
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.18);
 }
 
@@ -74,7 +144,7 @@
 .btn-primary {
   background: linear-gradient(180deg, #4f46e5 0%, #4338ca 100%);
   border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2);
   transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -89,16 +159,16 @@
 }
 
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #e2e8f0;
+  background: var(--btn-sec-bg);
+  border: 1px solid var(--btn-sec-border);
+  color: var(--btn-sec-text);
   transition: all 0.15s ease;
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.09);
-  color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.16);
+  background: var(--btn-sec-hover-bg);
+  color: var(--btn-sec-text-hover);
+  border-color: var(--border-hover);
 }
 
 /* Custom Scrollbar */
@@ -108,14 +178,14 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(8, 11, 17, 0.5);
+  background: var(--scrollbar-track);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.14);
+  background: var(--scrollbar-thumb);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.25);
+  background: var(--scrollbar-thumb-hover);
 }

@@ -83,28 +83,28 @@ export default function OwnerConversation({ conversationId }) {
     return (
         <div className="max-w-3xl mx-auto space-y-5">
             {/* Top Navigation & Status Bar */}
-            <div className="flex items-center justify-between gap-4 pb-4 border-b border-white/[0.08]">
+            <div className="flex items-center justify-between gap-4 pb-4 border-b border-slate-200/80 dark:border-white/[0.08]">
                 <Link
                     to="/inbox"
-                    className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-white transition-colors"
+                    className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors"
                 >
                     ← Back to Inbox
                 </Link>
 
                 <div className="flex items-center gap-2.5">
                     {isFetching && (
-                        <span className="text-[11px] text-indigo-400/80 font-mono">
+                        <span className="text-[11px] text-indigo-500 dark:text-indigo-400/80 font-mono">
                             syncing...
                         </span>
                     )}
 
                     {isActive ? (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                             Active Thread
                         </span>
                     ) : (
-                        <span className="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                        <span className="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
                             Closed
                         </span>
                     )}
@@ -113,7 +113,7 @@ export default function OwnerConversation({ conversationId }) {
                         <button
                             type="button"
                             onClick={() => setShareModalOpen(true)}
-                            className="inline-flex items-center gap-1.5 text-[11px] px-2.5 py-1 rounded-lg btn-secondary text-indigo-300 hover:text-white hover:bg-indigo-600/20 transition-all cursor-pointer"
+                            className="inline-flex items-center gap-1.5 text-[11px] px-2.5 py-1 rounded-lg btn-secondary text-indigo-600 dark:text-indigo-300 hover:text-indigo-700 dark:hover:text-white transition-all cursor-pointer"
                         >
                             <ShareIcon className="w-3 h-3" />
                             <span>Share Q&A</span>
@@ -133,7 +133,7 @@ export default function OwnerConversation({ conversationId }) {
                                 }
                             }}
                             disabled={closeConv.isPending}
-                            className="inline-flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-lg btn-secondary text-slate-300 hover:text-red-300 hover:bg-red-500/10 transition-all cursor-pointer disabled:opacity-50"
+                            className="inline-flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-lg btn-secondary text-slate-600 dark:text-slate-300 hover:text-red-600 dark:hover:text-red-300 hover:bg-red-500/10 transition-all cursor-pointer disabled:opacity-50"
                         >
                             <CloseIcon className="w-3 h-3" />
                             <span>Close Thread</span>
@@ -160,7 +160,7 @@ export default function OwnerConversation({ conversationId }) {
                 {/* Messages Viewport */}
                 <div className="overflow-y-auto space-y-4 pr-1 flex-1">
                     {messages.length === 0 ? (
-                        <div className="text-center py-16 text-slate-500 text-xs">
+                        <div className="text-center py-16 text-slate-400 text-xs">
                             No messages in this thread.
                         </div>
                     ) : (
@@ -180,8 +180,8 @@ export default function OwnerConversation({ conversationId }) {
                                             : "items-start mr-10 sm:mr-16"
                                     }`}
                                 >
-                                    <div className="flex items-center gap-1.5 mb-1 text-[11px] text-slate-400 flex-wrap">
-                                        <span className="font-semibold text-slate-300">
+                                    <div className="flex items-center gap-1.5 mb-1 text-[11px] text-slate-500 dark:text-slate-400 flex-wrap">
+                                        <span className="font-semibold text-slate-800 dark:text-slate-300">
                                             {isOwner ? "You" : "Anonymous Sender"}
                                         </span>
                                         <span>• {time}</span>
@@ -190,7 +190,7 @@ export default function OwnerConversation({ conversationId }) {
                                         {!isOwner && message.sender_hint?.device && (
                                             <span
                                                 title={`Platform: ${message.sender_hint.platform || "Web"}, Browser: ${message.sender_hint.browser || "Browser"}`}
-                                                className="text-[10px] px-2 py-0.2 rounded-full bg-white/[0.05] text-slate-400 border border-white/[0.06] font-mono inline-flex items-center gap-1"
+                                                className="text-[10px] px-2 py-0.2 rounded-full bg-slate-100 dark:bg-white/[0.05] text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-white/[0.06] font-mono inline-flex items-center gap-1"
                                             >
                                                 <span>📱</span>
                                                 <span>{message.sender_hint.device}</span>
@@ -202,7 +202,7 @@ export default function OwnerConversation({ conversationId }) {
                                         className={`px-4 py-2.5 rounded-2xl text-xs sm:text-sm leading-relaxed max-w-full break-words shadow-sm relative ${
                                             isOwner
                                                 ? "bg-indigo-600 text-white rounded-tr-sm border border-indigo-500/30"
-                                                : "surface-card text-slate-200 rounded-tl-sm border border-white/[0.08]"
+                                                : "surface-card text-slate-800 dark:text-slate-200 rounded-tl-sm border border-slate-200/80 dark:border-white/[0.08]"
                                         }`}
                                     >
                                         <p className="whitespace-pre-wrap">{message.content}</p>
@@ -224,10 +224,10 @@ export default function OwnerConversation({ conversationId }) {
                                                                         emoji,
                                                                     })
                                                                 }
-                                                                className="inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full bg-slate-800/90 border border-white/[0.08] text-slate-200 hover:border-indigo-500/50 cursor-pointer"
+                                                                className="text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/[0.06] border border-slate-200 dark:border-white/[0.08] hover:scale-105 transition-transform cursor-pointer"
                                                             >
-                                                                <span>{emoji}</span>
-                                                                <span className="font-mono text-[9px] text-slate-400">
+                                                                <span>{emoji}</span>{" "}
+                                                                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">
                                                                     {count}
                                                                 </span>
                                                             </button>
@@ -237,7 +237,7 @@ export default function OwnerConversation({ conversationId }) {
                                             )}
 
                                         {/* Hover Reaction trigger chips */}
-                                        <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900/90 px-1.5 py-0.5 rounded-full border border-white/[0.08]">
+                                        <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity bg-white/95 dark:bg-slate-900/90 px-1.5 py-0.5 rounded-full border border-slate-200 dark:border-white/[0.08] shadow-sm">
                                             {["❤️", "🔥", "😂", "👏", "😮"].map((emoji) => (
                                                 <button
                                                     key={emoji}
@@ -267,7 +267,7 @@ export default function OwnerConversation({ conversationId }) {
                 {isActive ? (
                     <form
                         onSubmit={handleSubmit}
-                        className="mt-4 pt-4 border-t border-white/[0.08]"
+                        className="mt-4 pt-4 border-t border-slate-200/80 dark:border-white/[0.08]"
                     >
                         <div className="relative">
                             <textarea
@@ -305,7 +305,7 @@ export default function OwnerConversation({ conversationId }) {
                         )}
                     </form>
                 ) : (
-                    <div className="mt-4 pt-4 border-t border-white/[0.08] text-center py-2 text-xs text-amber-400/90 font-medium">
+                    <div className="mt-4 pt-4 border-t border-slate-200/80 dark:border-white/[0.08] text-center py-2 text-xs text-amber-500 dark:text-amber-400/90 font-medium">
                         This conversation has been closed.
                     </div>
                 )}

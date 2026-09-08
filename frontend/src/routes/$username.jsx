@@ -4,6 +4,7 @@ import ShareProfile from "../features/profile/ShareProfile";
 import CopyProfileLink from "../features/profile/CopyProfileLink";
 import { publicProfileQuery } from "../features/profile/publicApi";
 import { LogoIcon, CheckIcon } from "../components/icons";
+import ThemeToggle from "../components/ThemeToggle";
 
 export const Route = createFileRoute("/$username")({
     loader: async ({ params, context }) => {
@@ -51,12 +52,12 @@ export const Route = createFileRoute("/$username")({
     },
 
     errorComponent: ({ error }) => (
-        <main className="min-h-screen flex items-center justify-center p-4 bg-[#080b11] text-slate-100 bg-grid-pattern">
+        <main className="min-h-screen flex items-center justify-center p-4 bg-[var(--bg-primary)] text-[var(--text-primary)] bg-grid-pattern transition-colors duration-150">
             <div className="surface-panel p-8 rounded-2xl max-w-sm w-full text-center space-y-4">
-                <h1 className="text-lg font-bold text-white">
+                <h1 className="text-lg font-bold text-slate-900 dark:text-white">
                     Profile Not Found
                 </h1>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-slate-500 dark:text-slate-400">
                     {error?.message ||
                         "This user does not exist or has set their profile to private."}
                 </p>
@@ -80,12 +81,12 @@ function PublicProfilePage() {
 
     if (!profile) {
         return (
-            <main className="min-h-screen flex items-center justify-center p-4 bg-[#080b11] text-slate-100 bg-grid-pattern">
+            <main className="min-h-screen flex items-center justify-center p-4 bg-[var(--bg-primary)] text-[var(--text-primary)] bg-grid-pattern transition-colors duration-150">
                 <div className="surface-panel p-8 rounded-2xl max-w-sm w-full text-center space-y-4">
-                    <h1 className="text-lg font-bold text-white">
+                    <h1 className="text-lg font-bold text-slate-900 dark:text-white">
                         Profile Not Found
                     </h1>
-                    <p className="text-xs text-slate-400">
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
                         @{username} does not exist or has set their profile to private.
                     </p>
                     <Link
@@ -100,25 +101,28 @@ function PublicProfilePage() {
     }
 
     return (
-        <div className="min-h-screen bg-[#080b11] text-slate-100 bg-grid-pattern flex flex-col justify-between py-6 px-4 selection:bg-indigo-500 selection:text-white">
+        <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] bg-grid-pattern flex flex-col justify-between py-6 px-4 selection:bg-indigo-500 selection:text-white transition-colors duration-150">
             {/* Header */}
             <header className="max-w-lg mx-auto w-full flex items-center justify-between pb-6">
                 <Link
                     to="/"
-                    className="flex items-center gap-2 text-xs font-semibold text-slate-300 hover:text-white transition-colors"
+                    className="flex items-center gap-2 text-xs font-semibold text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white transition-colors"
                 >
-                    <div className="w-6 h-6 rounded-md bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
+                    <div className="w-6 h-6 rounded-md bg-indigo-600/10 dark:bg-indigo-600/20 border border-indigo-500/20 dark:border-indigo-500/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
                         <LogoIcon className="w-3.5 h-3.5" />
                     </div>
                     <span>Mystry Message</span>
                 </Link>
 
-                <Link
-                    to="/"
-                    className="text-xs px-3 py-1.5 rounded-lg btn-secondary font-medium"
-                >
-                    Create Your Link
-                </Link>
+                <div className="flex items-center gap-2">
+                    <ThemeToggle />
+                    <Link
+                        to="/"
+                        className="text-xs px-3 py-1.5 rounded-lg btn-secondary font-medium"
+                    >
+                        Create Your Link
+                    </Link>
+                </div>
             </header>
 
             {/* Profile Content */}
@@ -130,32 +134,32 @@ function PublicProfilePage() {
                             <img
                                 src={profile.avatar_url}
                                 alt={profile.display_name}
-                                className="w-20 h-20 rounded-2xl object-cover ring-2 ring-white/[0.08] shadow-lg mx-auto"
+                                className="w-20 h-20 rounded-2xl object-cover ring-2 ring-slate-200 dark:ring-white/[0.08] shadow-lg mx-auto"
                             />
                         ) : (
-                            <div className="w-20 h-20 rounded-2xl bg-gradient-to-tr from-indigo-600 to-indigo-800 flex items-center justify-center text-white text-2xl font-bold ring-2 ring-white/[0.08] shadow-lg mx-auto">
+                            <div className="w-20 h-20 rounded-2xl bg-gradient-to-tr from-indigo-600 to-indigo-800 flex items-center justify-center text-white text-2xl font-bold ring-2 ring-slate-200 dark:ring-white/[0.08] shadow-lg mx-auto">
                                 {profile.display_name?.charAt(0) || "U"}
                             </div>
                         )}
                         <span
                             title="Verified user"
-                            className="absolute -bottom-1 -right-1 w-5 h-5 bg-indigo-600 rounded-full border-2 border-[#080b11] flex items-center justify-center text-white"
+                            className="absolute -bottom-1 -right-1 w-5 h-5 bg-indigo-600 rounded-full border-2 border-[var(--bg-primary)] flex items-center justify-center text-white"
                         >
                             <CheckIcon className="w-2.5 h-2.5" />
                         </span>
                     </div>
 
                     <div>
-                        <h1 className="text-xl font-bold text-white tracking-tight">
+                        <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
                             {profile.display_name}
                         </h1>
-                        <p className="text-xs font-mono text-indigo-400 mt-0.5">
+                        <p className="text-xs font-mono text-indigo-600 dark:text-indigo-400 mt-0.5">
                             @{profile.username}
                         </p>
                     </div>
 
                     {profile.bio && (
-                        <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-sm mx-auto">
+                        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed max-w-sm mx-auto">
                             {profile.bio}
                         </p>
                     )}
@@ -168,7 +172,7 @@ function PublicProfilePage() {
 
                 {/* Anonymous Form Card */}
                 <div className="surface-panel p-6 sm:p-7 rounded-2xl">
-                    <h2 className="text-sm font-bold text-white mb-3">
+                    <h2 className="text-sm font-bold text-slate-900 dark:text-white mb-3">
                         Send Anonymous Message
                     </h2>
                     <AnonymousMessageForm
@@ -179,7 +183,7 @@ function PublicProfilePage() {
             </main>
 
             {/* Footer */}
-            <footer className="text-center py-6 text-[11px] text-slate-600">
+            <footer className="text-center py-6 text-[11px] text-slate-500">
                 Encrypted & Moderated by Mystry Message
             </footer>
         </div>

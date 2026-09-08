@@ -60,15 +60,15 @@ export default function PromptSuggestions({ onSelectPrompt }) {
     return (
         <div className="space-y-2.5 pt-1">
             <div className="flex items-center justify-between text-xs">
-                <span className="text-slate-400 font-medium flex items-center gap-1.5 text-[11px]">
-                    <SparklesIcon className="w-3.5 h-3.5 text-indigo-400" />
+                <span className="text-slate-500 dark:text-slate-400 font-medium flex items-center gap-1.5 text-[11px]">
+                    <SparklesIcon className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400" />
                     Need inspiration? Tap a prompt:
                 </span>
 
                 <button
                     type="button"
                     onClick={handleShuffle}
-                    className="text-[11px] font-semibold text-indigo-400 hover:text-indigo-300 transition-colors flex items-center gap-1 cursor-pointer"
+                    className="text-[11px] font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors flex items-center gap-1 cursor-pointer"
                 >
                     🎲 Shuffle
                 </button>
@@ -83,8 +83,8 @@ export default function PromptSuggestions({ onSelectPrompt }) {
                         onClick={() => handleCategoryClick(cat.id)}
                         className={`text-[11px] px-2.5 py-1 rounded-lg shrink-0 transition-all cursor-pointer border ${
                             selectedCategory === cat.id
-                                ? "bg-indigo-600/30 text-indigo-200 border-indigo-500/40 font-semibold shadow-sm"
-                                : "btn-secondary text-slate-400 hover:text-white"
+                                ? "bg-indigo-600 text-white border-indigo-500 font-semibold shadow-xs"
+                                : "btn-secondary text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
                         }`}
                     >
                         {cat.label}
@@ -96,12 +96,12 @@ export default function PromptSuggestions({ onSelectPrompt }) {
             <button
                 type="button"
                 onClick={() => onSelectPrompt(currentPrompts[promptIndex])}
-                className="w-full text-left p-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.06] transition-all text-xs text-slate-300 hover:text-white cursor-pointer group flex items-start justify-between gap-2"
+                className="w-full text-left p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200/80 border border-slate-200 dark:bg-white/[0.03] dark:hover:bg-white/[0.06] dark:border-white/[0.06] transition-all text-xs text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white cursor-pointer group flex items-start justify-between gap-2"
             >
                 <span className="line-clamp-2 italic">
                     "{currentPrompts[promptIndex]}"
                 </span>
-                <span className="text-[10px] text-indigo-400 font-medium shrink-0 group-hover:translate-x-0.5 transition-transform">
+                <span className="text-[10px] text-indigo-600 dark:text-indigo-400 font-medium shrink-0 group-hover:translate-x-0.5 transition-transform">
                     Use →
                 </span>
             </button>

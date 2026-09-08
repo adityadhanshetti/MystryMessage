@@ -1,9 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { applyTheme, getStoredTheme } from "../lib/theme";
 
-const initialTheme =
-    typeof window !== "undefined" && localStorage.getItem("mystry-theme")
-        ? localStorage.getItem("mystry-theme")
-        : "system";
+const initialTheme = getStoredTheme();
+if (typeof window !== "undefined") {
+    applyTheme(initialTheme);
+}
 
 const initialState = {
     theme: initialTheme,
@@ -17,9 +18,7 @@ export const uiSlice = createSlice({
     reducers: {
         setTheme: (state, action) => {
             state.theme = action.payload;
-            if (typeof window !== "undefined") {
-                localStorage.setItem("mystry-theme", action.payload);
-            }
+            applyTheme(action.payload);
         },
         setInboxFilter: (state, action) => {
             state.inboxFilter = action.payload;

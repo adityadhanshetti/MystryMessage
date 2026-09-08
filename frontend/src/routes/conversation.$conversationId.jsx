@@ -69,9 +69,9 @@ function ConversationPage() {
         return (
             <main className="max-w-2xl mx-auto px-4 py-12">
                 <div className="surface-panel p-6 rounded-2xl space-y-4 animate-pulse">
-                    <div className="h-4 w-32 bg-slate-800 rounded" />
-                    <div className="h-14 bg-slate-800/60 rounded-xl w-2/3" />
-                    <div className="h-14 bg-slate-800/60 rounded-xl w-1/2 ml-auto" />
+                    <div className="h-4 w-32 bg-slate-200 dark:bg-slate-800 rounded" />
+                    <div className="h-14 bg-slate-200/70 dark:bg-slate-800/60 rounded-xl w-2/3" />
+                    <div className="h-14 bg-slate-200/70 dark:bg-slate-800/60 rounded-xl w-1/2 ml-auto" />
                 </div>
             </main>
         );
@@ -80,10 +80,10 @@ function ConversationPage() {
     if (conversation.isError) {
         return (
             <main className="max-w-md mx-auto px-4 py-20 text-center">
-                <h1 className="text-xl font-bold text-white mb-2">
+                <h1 className="text-xl font-bold text-slate-900 dark:text-white mb-2">
                     Thread Unavailable
                 </h1>
-                <p className="text-xs text-slate-400 mb-6">
+                <p className="text-xs text-slate-500 dark:text-slate-400 mb-6">
                     {conversation.error.message ||
                         "This conversation thread is no longer accessible."}
                 </p>
@@ -100,22 +100,22 @@ function ConversationPage() {
     return (
         <main className="max-w-2xl mx-auto px-4 py-8 space-y-5">
             {/* Header */}
-            <div className="flex items-center justify-between pb-4 border-b border-white/[0.08]">
+            <div className="flex items-center justify-between pb-4 border-b border-slate-200/80 dark:border-white/[0.08]">
                 <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                    <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
                         <ShieldCheckIcon className="w-4 h-4" />
                     </div>
                     <div>
-                        <h1 className="text-sm font-bold text-white tracking-tight">
+                        <h1 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight">
                             Anonymous Conversation
                         </h1>
-                        <p className="text-[11px] text-slate-400">
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400">
                             Your identity is encrypted and strictly anonymous
                         </p>
                     </div>
                 </div>
 
-                <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-white/[0.06] text-slate-400 font-mono">
+                <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-white/[0.06] text-slate-600 dark:text-slate-400 font-mono">
                     {messages.length} {messages.length === 1 ? "message" : "messages"}
                 </span>
             </div>
@@ -124,7 +124,7 @@ function ConversationPage() {
             <div className="surface-panel p-5 sm:p-6 rounded-2xl min-h-[420px] max-h-[600px] flex flex-col justify-between">
                 <div className="overflow-y-auto space-y-4 pr-1 flex-1">
                     {messages.length === 0 ? (
-                        <div className="text-center py-16 text-slate-500 text-xs">
+                        <div className="text-center py-16 text-slate-400 text-xs">
                             No messages in this conversation.
                         </div>
                     ) : (
@@ -144,8 +144,8 @@ function ConversationPage() {
                                             : "items-start mr-10 sm:mr-16"
                                     }`}
                                 >
-                                    <div className="flex items-center gap-1.5 mb-1 text-[11px] text-slate-400">
-                                        <span className="font-semibold text-slate-300">
+                                    <div className="flex items-center gap-1.5 mb-1 text-[11px] text-slate-500 dark:text-slate-400">
+                                        <span className="font-semibold text-slate-800 dark:text-slate-300">
                                             {isMe ? "You (Anonymous)" : "Profile Owner"}
                                         </span>
                                         <span>• {time}</span>
@@ -155,7 +155,7 @@ function ConversationPage() {
                                         className={`px-4 py-2.5 rounded-2xl text-xs sm:text-sm leading-relaxed max-w-full break-words shadow-sm ${
                                             isMe
                                                 ? "bg-emerald-600 text-white rounded-tr-sm border border-emerald-500/30"
-                                                : "surface-card text-slate-200 rounded-tl-sm border border-white/[0.08]"
+                                                : "surface-card text-slate-800 dark:text-slate-200 rounded-tl-sm border border-slate-200/80 dark:border-white/[0.08]"
                                         }`}
                                     >
                                         <p className="whitespace-pre-wrap">{message.content}</p>
@@ -170,7 +170,7 @@ function ConversationPage() {
                 {/* Reply Form */}
                 <form
                     onSubmit={handleSubmit}
-                    className="mt-4 pt-4 border-t border-white/[0.08]"
+                    className="mt-4 pt-4 border-t border-slate-200/80 dark:border-white/[0.08]"
                 >
                     <div className="relative">
                         <textarea
@@ -188,7 +188,7 @@ function ConversationPage() {
                             className="w-full surface-input rounded-xl p-3 pr-24 text-xs sm:text-sm resize-none"
                         />
                         <div className="absolute right-2.5 bottom-2.5 flex items-center gap-2">
-                            <span className="text-[10px] text-slate-500 font-mono">
+                            <span className="text-[10px] text-slate-400 dark:text-slate-500 font-mono">
                                 {content.length}/1000
                             </span>
                             <button

@@ -7,6 +7,7 @@ import {
 import { UserButton } from "@clerk/clerk-react";
 import { useConversations } from "../../features/conversations/api";
 import { LogoIcon } from "../../components/icons";
+import ThemeToggle from "../../components/ThemeToggle";
 
 export const Route = createFileRoute("/_authenticated")({
     beforeLoad: ({ context }) => {
@@ -24,22 +25,22 @@ function AuthenticatedLayout() {
     const unreadCount = data?.data?.unread_count || 0;
 
     return (
-        <div className="min-h-screen flex flex-col bg-[#080b11] text-slate-100 bg-grid-pattern selection:bg-indigo-500 selection:text-white">
+        <div className="min-h-screen flex flex-col bg-[var(--bg-primary)] text-[var(--text-primary)] bg-grid-pattern selection:bg-indigo-500 selection:text-white transition-colors duration-150">
             {/* Ambient subtle lighting header */}
-            <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[700px] h-[180px] bg-indigo-500/[0.07] blur-[100px] pointer-events-none rounded-full" />
+            <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[700px] h-[180px] bg-indigo-500/[0.05] blur-[100px] pointer-events-none rounded-full" />
 
             {/* Top Navigation Bar */}
-            <header className="sticky top-0 z-40 backdrop-blur-xl bg-[#080b11]/85 border-b border-white/[0.08] transition-all">
+            <header className="sticky top-0 z-40 backdrop-blur-xl bg-white/80 dark:bg-[#080b11]/85 border-b border-slate-200/80 dark:border-white/[0.08] transition-colors duration-150">
                 <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
                     {/* Brand */}
                     <Link
                         to="/inbox"
-                        className="flex items-center gap-2.5 font-bold text-base tracking-tight text-white group"
+                        className="flex items-center gap-2.5 font-bold text-base tracking-tight text-slate-900 dark:text-white group"
                     >
-                        <div className="w-8 h-8 rounded-lg bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 group-hover:border-indigo-500/50 group-hover:bg-indigo-600/30 transition-all">
+                        <div className="w-8 h-8 rounded-lg bg-indigo-600/10 dark:bg-indigo-600/20 border border-indigo-500/20 dark:border-indigo-500/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 group-hover:border-indigo-500/50 group-hover:bg-indigo-600/25 transition-all">
                             <LogoIcon className="w-4 h-4" />
                         </div>
-                        <span className="font-semibold tracking-tight text-slate-100 group-hover:text-white transition-colors">
+                        <span className="font-semibold tracking-tight text-slate-900 dark:text-slate-100 group-hover:text-indigo-600 dark:group-hover:text-white transition-colors">
                             Mystry Message
                         </span>
                     </Link>
@@ -48,10 +49,10 @@ function AuthenticatedLayout() {
                     <nav className="flex items-center gap-1">
                         <Link
                             to="/inbox"
-                            className="px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-100 hover:bg-white/[0.04] transition-all flex items-center gap-1.5"
+                            className="px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-200/50 dark:hover:bg-white/[0.04] transition-all flex items-center gap-1.5"
                             activeProps={{
                                 className:
-                                    "px-3.5 py-1.5 rounded-lg text-xs font-semibold text-white bg-white/[0.08] border border-white/[0.06] shadow-sm",
+                                    "px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-900 dark:text-white bg-slate-200/80 dark:bg-white/[0.08] border border-slate-300 dark:border-white/[0.06] shadow-xs",
                             }}
                         >
                             <span>Inbox</span>
@@ -64,10 +65,10 @@ function AuthenticatedLayout() {
 
                         <Link
                             to="/profile"
-                            className="px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-100 hover:bg-white/[0.04] transition-all"
+                            className="px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-200/50 dark:hover:bg-white/[0.04] transition-all"
                             activeProps={{
                                 className:
-                                    "px-3.5 py-1.5 rounded-lg text-xs font-semibold text-white bg-white/[0.08] border border-white/[0.06] shadow-sm",
+                                    "px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-900 dark:text-white bg-slate-200/80 dark:bg-white/[0.08] border border-slate-300 dark:border-white/[0.06] shadow-xs",
                             }}
                         >
                             Profile
@@ -75,24 +76,25 @@ function AuthenticatedLayout() {
 
                         <Link
                             to="/settings"
-                            className="px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-slate-100 hover:bg-white/[0.04] transition-all"
+                            className="px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-200/50 dark:hover:bg-white/[0.04] transition-all"
                             activeProps={{
                                 className:
-                                    "px-3.5 py-1.5 rounded-lg text-xs font-semibold text-white bg-white/[0.08] border border-white/[0.06] shadow-sm",
+                                    "px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-900 dark:text-white bg-slate-200/80 dark:bg-white/[0.08] border border-slate-300 dark:border-white/[0.06] shadow-xs",
                             }}
                         >
                             Settings
                         </Link>
                     </nav>
 
-                    {/* User profile button */}
-                    <div className="flex items-center gap-3">
+                    {/* User profile & Theme toggle */}
+                    <div className="flex items-center gap-2 sm:gap-3">
+                        <ThemeToggle />
                         <UserButton
                             afterSignOutUrl="/"
                             appearance={{
                                 elements: {
                                     avatarBox:
-                                        "w-8 h-8 rounded-lg ring-1 ring-white/10",
+                                        "w-8 h-8 rounded-lg ring-1 ring-slate-200 dark:ring-white/10",
                                 },
                             }}
                         />
